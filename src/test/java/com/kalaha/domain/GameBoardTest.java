@@ -1,8 +1,6 @@
 package com.kalaha.domain;
 
-import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 class GameBoardTest {
@@ -20,7 +18,7 @@ class GameBoardTest {
 		Pit expectedPit = expected;
 		Pit actual = head;
 
-		while(expectedPit.getNumber() < 14){
+		while (expectedPit.getNumber() < 14) {
 			assertThat(expectedPit).isEqualTo(actual);
 			expectedPit = expectedPit.getNext();
 			actual = actual.getNext();

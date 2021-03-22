@@ -3,7 +3,6 @@ package com.kalaha.domain;
 import static com.kalaha.domain.Player.PLAYER_1;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
@@ -61,10 +60,10 @@ public class GameBoard {
 	}
 
 	Pit findHomeForPlayerWithTurn(Pit last, Player playerWithTurn) {
-		int number = playerWithTurn == PLAYER_1 ?  homePitNumberOfPlayerOne : homePitNumberOfPlayerTwo;
+		int number = playerWithTurn == PLAYER_1 ? homePitNumberOfPlayerOne : homePitNumberOfPlayerTwo;
 
 		Pit current = last.getNext();
-		while (current.getNumber() != number){
+		while (current.getNumber() != number) {
 			current = current.getNext();
 		}
 		return current;
@@ -83,16 +82,16 @@ public class GameBoard {
 
 	boolean canPlayersMakeMove() {
 		Pit current = head;
-		while(current.getStones().isPitEmpty() && current.getNumber() != homePitNumberOfPlayerOne){
+		while (current.getStones().isPitEmpty() && current.getNumber() != homePitNumberOfPlayerOne) {
 			current = current.getNext();
 		}
-		if (current.getNumber() == homePitNumberOfPlayerOne){
+		if (current.getNumber() == homePitNumberOfPlayerOne) {
 			return false;
 		}
 
 		current = findPitById(homePitNumberOfPlayerOne + 1);
 
-		while(current.getStones().isPitEmpty() && current.getNumber() != homePitNumberOfPlayerTwo){
+		while (current.getStones().isPitEmpty() && current.getNumber() != homePitNumberOfPlayerTwo) {
 			current = current.getNext();
 		}
 		return current.getNumber() != homePitNumberOfPlayerTwo;
@@ -104,7 +103,7 @@ public class GameBoard {
 
 	@Value
 	@Builder
-	public static class GameBoardParameters{
+	public static class GameBoardParameters {
 		int ordinaryPitsSize;
 		int homePitNumberOfPlayerOne;
 		int homePitNumberOfPlayerTwo;

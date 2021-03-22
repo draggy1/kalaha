@@ -6,34 +6,33 @@ import com.kalaha.domain.GameBoard;
 import com.kalaha.services.dto.AfterMoveResponse;
 import com.kalaha.services.dto.GameDetails;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 @Service
+@Getter
 public class GameService {
-	private final Map<Long, Game> GAMES_CONTAINER;
-	private long GAME_COUNTER = 1;
 	private final GameConfig config;
+	private final GameContainer container;
 
-	public GameService(GameConfig config) {
+	public GameService(GameConfig config, GameContainer container) {
 		this.config = config;
-		GAMES_CONTAINER = new HashMap<>();
+		this.container = container;
 	}
 
 	public GameDetails createGame() {
+		long gameId = container.getGameCounter();
 		URI uri = URI.create(config.getUrl())
 				.resolve("games/")
-				.resolve(String.valueOf(GAME_COUNTER));
+				.resolve(String.valueOf(gameId));
 
 		GameBoard board = GameBoard.of(config.getOrdinaryPitsSize(), config.getStones());
-		GAMES_CONTAINER.put(GAME_COUNTER, new Game(GAME_COUNTER, board));
-
-		return GameDetails.of(GAME_COUNTER++, uri);
+		container.addGame(new Game(gameId, board));
+		return GameDetails.of(gameId, uri);
 	}
 
 	public AfterMoveResponse makeMove(long gameId, int pitId) {
-		Game game = GAMES_CONTAINER.get(gameId);
+		Game game = container.getGameContainer().get(gameId);
 
 		Validation result = Validation.validate(game, pitId);
 		return getResponse(pitId, game, result);

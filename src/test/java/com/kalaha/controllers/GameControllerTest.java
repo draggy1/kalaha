@@ -1,12 +1,18 @@
 package com.kalaha.controllers;
 
+import com.kalaha.domain.Player;
 import com.kalaha.services.GameService;
 import static com.kalaha.services.Validation.CHOSEN_HOME_PIT;
+import static com.kalaha.services.Validation.CHOSEN_PIT_WITHOUT_STONE;
+import static com.kalaha.services.Validation.FINISHED;
 import static com.kalaha.services.Validation.GAME_NOT_FOUND;
 import static com.kalaha.services.Validation.NOT_YOUR_TURN;
+import static com.kalaha.services.Validation.SUCCESS;
+import com.kalaha.services.dto.AfterMove;
 import com.kalaha.services.dto.AfterMoveResponse;
 import com.kalaha.services.dto.GameDetails;
 import java.net.URI;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.Mockito.when;
@@ -74,5 +80,46 @@ class GameControllerTest {
 		mockMvc.perform(put(String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId))
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
+	}
+
+	@Test
+	void shouldReturnBadRequestWhenChosenPitWithoutStone() throws Exception {
+		long givenGameId = 1;
+		int givenPitId = 1;
+		when(service.makeMove(givenGameId, givenPitId)).thenReturn(AfterMoveResponse.createFailedResponse(CHOSEN_PIT_WITHOUT_STONE));
+
+		mockMvc.perform(put(String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId))
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().is(HttpStatus.BAD_REQUEST.value()));
+	}
+
+	@Test
+	void shouldReturnOkWhenGameIsFinished() throws Exception {
+		long givenGameId = 1;
+		int givenPitId = 1;
+		String givenUrl = String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId);
+		AfterMove afterMove = AfterMove.of(givenGameId, URI.create(givenUrl), Map.of(), Player.PLAYER_1);
+		when(service.makeMove(givenGameId, givenPitId)).thenReturn(AfterMoveResponse.createSuccessResponse(afterMove, FINISHED));
+
+		mockMvc.perform(put(givenUrl)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().is(HttpStatus.OK.value()))
+				.andExpect(jsonPath("$.id").value(1))
+				.andExpect(jsonPath("$.url").value(givenUrl));
+	}
+
+	@Test
+	void shouldReturnOkWhenMadeMoveSuccessfully() throws Exception {
+		long givenGameId = 1;
+		int givenPitId = 1;
+		String givenUrl = String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId);
+		AfterMove afterMove = AfterMove.of(givenGameId, URI.create(givenUrl), Map.of(), Player.PLAYER_1);
+		when(service.makeMove(givenGameId, givenPitId)).thenReturn(AfterMoveResponse.createSuccessResponse(afterMove, SUCCESS));
+
+		mockMvc.perform(put(givenUrl)
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().is(HttpStatus.OK.value()))
+				.andExpect(jsonPath("$.id").value(1))
+				.andExpect(jsonPath("$.url").value(givenUrl));
 	}
 }

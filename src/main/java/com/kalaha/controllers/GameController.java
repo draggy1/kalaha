@@ -1,7 +1,6 @@
 package com.kalaha.controllers;
 
 import com.kalaha.services.GameService;
-import com.kalaha.services.Validation;
 import static com.kalaha.services.Validation.CHOSEN_HOME_PIT;
 import static com.kalaha.services.Validation.CHOSEN_PIT_WITHOUT_STONE;
 import static com.kalaha.services.Validation.GAME_NOT_FOUND;
@@ -9,7 +8,6 @@ import static com.kalaha.services.Validation.NOT_YOUR_TURN;
 import com.kalaha.services.dto.AfterMove;
 import com.kalaha.services.dto.AfterMoveResponse;
 import com.kalaha.services.dto.GameDetails;
-import java.util.Optional;
 import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
