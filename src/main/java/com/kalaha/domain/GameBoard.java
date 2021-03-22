@@ -35,18 +35,12 @@ public class GameBoard {
 				.build();
 	}
 
-	public Optional<Pit> getHead() {
-		return Optional.ofNullable(head);
-	}
-
-	Optional<Pit> findPitById(int pitId) {
-		return getHead().map(head -> {
-			Pit current = head;
-			while (current.getNumber() != pitId) {
-				current = current.getNext();
-			}
-			return current;
-		});
+	Pit findPitById(int pitId) {
+		Pit current = head;
+		while (current.getNumber() != pitId) {
+			current = current.getNext();
+		}
+		return current;
 	}
 
 	static Pit moveStones(Pit pit, Player playerWithMove) {
@@ -85,6 +79,23 @@ public class GameBoard {
 		}
 		status.put(current.getNumber(), current.getStones().getStonesNumber());
 		return status;
+	}
+
+	boolean canPlayersMakeMove() {
+		Pit current = head;
+		while(current.getStones().isPitEmpty() && current.getNumber() != homePitNumberOfPlayerOne){
+			current = current.getNext();
+		}
+		if (current.getNumber() == homePitNumberOfPlayerOne){
+			return false;
+		}
+
+		current = findPitById(homePitNumberOfPlayerOne + 1);
+
+		while(current.getStones().isPitEmpty() && current.getNumber() != homePitNumberOfPlayerTwo){
+			current = current.getNext();
+		}
+		return current.getNumber() != homePitNumberOfPlayerTwo;
 	}
 
 	private static int calculateHomePitNumberOfPlayerTwo(int ordinaryPitsSizeOnePlayer) {

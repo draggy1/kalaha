@@ -12,10 +12,10 @@ public enum Validation {
 	NOT_YOUR_TURN(Validation::isNotYourTurn),
 	CHOSEN_HOME_PIT((game, pitId) -> isItHomePit(game.getBoard(), pitId)),
 	CHOSEN_PIT_WITHOUT_STONE(Game::isPitEmpty),
+	FINISHED((game, pitId) -> game.isGameFinished()),
 	SUCCESS((game, pitId) -> true);
 
 	private final BiPredicate<Game, Integer> validation;
-
 
 	Validation(BiPredicate<Game, Integer> validation) {
 		this.validation = validation;

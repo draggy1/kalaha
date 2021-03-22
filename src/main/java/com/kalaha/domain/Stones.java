@@ -25,7 +25,7 @@ public class Stones {
 	}
 
 	void putStones(int stonesNumber) {
-		this.stonesNumber =+ stonesNumber;
+		this.stonesNumber = this.stonesNumber + stonesNumber;
 	}
 
 	boolean wasLastPitEmpty() {
@@ -34,5 +34,9 @@ public class Stones {
 
 	boolean isPitEmpty() {
 		return stonesNumber == 0;
+	}
+
+	boolean isPitNotEmpty(){
+		return !isPitEmpty();
 	}
 }

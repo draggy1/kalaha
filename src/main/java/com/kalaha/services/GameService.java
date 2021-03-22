@@ -36,15 +36,32 @@ public class GameService {
 		Game game = GAMES_CONTAINER.get(gameId);
 
 		Validation result = Validation.validate(game, pitId);
-		return result == Validation.SUCCESS ? handleSuccess(pitId, game, result) : AfterMoveResponse.createFailedResponse(result);
+		return getResponse(pitId, game, result);
+	}
+
+	private AfterMoveResponse getResponse(int pitId, Game game, Validation result) {
+		return switch (result) {
+			case SUCCESS -> handleSuccess(pitId, game, result);
+			case FINISHED -> handleFinish(pitId, game, result);
+			default -> AfterMoveResponse.createFailedResponse(result);
+		};
 	}
 
 	private AfterMoveResponse handleSuccess(int pitId, Game game, Validation result) {
-		URI uri = URI.create(config.getUrl())
-				.resolve(String.format("games/%d/", game.getGameId()))
-				.resolve(String.format("pits/%d", pitId));
-
+		URI uri = getUri(pitId,game);
 		game.makeMove(pitId);
 		return AfterMoveResponse.createSuccessResponse(game.prepareResponse(uri), result);
+	}
+
+	private AfterMoveResponse handleFinish(int pitId, Game game, Validation result) {
+		URI uri = getUri(pitId,game);
+		game.handleFinish();
+		return AfterMoveResponse.createSuccessResponse(game.prepareResponse(uri), result);
+	}
+
+	private URI getUri(int pitId, Game game){
+		return URI.create(config.getUrl())
+				.resolve(String.format("games/%d/", game.getGameId()))
+				.resolve(String.format("pits/%d", pitId));
 	}
 }

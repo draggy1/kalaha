@@ -4,6 +4,7 @@ import static com.kalaha.domain.Player.PLAYER_1;
 import com.kalaha.services.dto.AfterMove;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Optional;
 import lombok.Getter;
 
 @Getter
@@ -19,13 +20,53 @@ public class Game {
 	}
 
 	public void makeMove(int pitId) {
-		Boolean isLastPitHome = board.findPitById(pitId)
+		Boolean isLastPitHome = Optional.of(board.findPitById(pitId))
 				.map(pit -> GameBoard.moveStones(pit, playerWithTurn))
 				.map(this::moveStonesIfLastWasEmpty)
 				.map(pit -> board.findHomeForPlayerWithTurn(pit, playerWithTurn) == pit)
 				.orElse(false);
 
 		playerWithTurn = isLastPitHome ? playerWithTurn : changeTurnToNextPlayer();
+	}
+
+	public AfterMove prepareResponse(URI uri) {
+		return AfterMove.of(gameId, uri, board.prepareStatus(), playerWithTurn);
+	}
+
+	public boolean isPitEmpty(int pidId) {
+		return Optional.of(board.findPitById(pidId))
+				.map(pit -> pit.getStones().isPitEmpty())
+				.orElse(true);
+	}
+
+	public Player whoseTurn() {
+		return playerWithTurn;
+	}
+
+	public boolean isGameFinished() {
+		return !board.canPlayersMakeMove();
+	}
+
+	public void handleFinish() {
+		Pit current = board.getHead();
+		Pit homePlayerOne = board.findPitById(board.getHomePitNumberOfPlayerOne());
+
+		while (current.getNumber() != board.getHomePitNumberOfPlayerOne()){
+			if(current.getStones().isPitNotEmpty()){
+				Pit.moveStonesBetweenPits(current, homePlayerOne);
+			}
+			current = current.getNext();
+		}
+
+		current = current.getNext();
+		Pit homePlayerTwo = board.findPitById(board.getHomePitNumberOfPlayerTwo());
+
+		while (current.getNumber() != board.getHomePitNumberOfPlayerTwo()){
+			if(current.getStones().isPitNotEmpty()){
+				Pit.moveStonesBetweenPits(current, homePlayerTwo);
+			}
+			current = current.getNext();
+		}
 	}
 
 	private Pit moveStonesIfLastWasEmpty(Pit last) {
@@ -42,19 +83,5 @@ public class Game {
 				.filter(el -> el != playerWithTurn)
 				.findAny()
 				.orElse(PLAYER_1);
-	}
-
-	public AfterMove prepareResponse(URI uri) {
-		return AfterMove.of(gameId, uri, board.prepareStatus(), playerWithTurn);
-	}
-
-	public boolean isPitEmpty(int pidId) {
-		return board.findPitById(pidId)
-				.map(pit -> pit.getStones().isPitEmpty())
-				.orElse(true);
-	}
-
-	public Player whoseTurn() {
-		return playerWithTurn;
 	}
 }

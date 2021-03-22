@@ -9,15 +9,12 @@ import static com.kalaha.domain.Player.PLAYER_2;
 public class GameBoardCreator {
 	private static final int FIRST_PIT_NUMBER = 1;
 	static Pit initBoard(GameBoardParameters parameters) {
-		int homePitNumberOfPlayerTwo = parameters.getHomePitNumberOfPlayerTwo();
-		int ordinaryPitsSize = parameters.getOrdinaryPitsSize();
-		int stones = parameters.getStones();
-
 		Pit homePlayerOne = Pit.createHomeForPlayerOne(parameters.getHomePitNumberOfPlayerOne());
-		Pit homePlayerTwo = Pit.createHomeForPlayerTwo(homePitNumberOfPlayerTwo);
+		Pit homePlayerTwo = Pit.createHomeForPlayerTwo(parameters.getHomePitNumberOfPlayerTwo());
 
-		Pit homePlayerOnePrevious = Pit.createOrdinary(ordinaryPitsSize, stones, PLAYER_1);
-		Pit homePlayerOnePreviousOpposite = Pit.createOrdinary(homePitNumberOfPlayerTwo - ordinaryPitsSize, stones, PLAYER_2);
+		Pit homePlayerOnePrevious = Pit.createOrdinary(parameters.getOrdinaryPitsSize(), parameters.getStones(), PLAYER_1);
+		Pit homePlayerOnePreviousOpposite =
+				Pit.createOrdinary(calculateNumber(parameters, parameters.getOrdinaryPitsSize()), parameters.getStones(), PLAYER_2);
 
 		linkOppositePits(homePlayerOnePrevious, homePlayerOnePreviousOpposite);
 		linkWithNextPit(homePlayerOnePrevious, homePlayerOne);
@@ -32,12 +29,10 @@ public class GameBoardCreator {
 	}
 
 	private static Pit createBoard(GameBoardParameters parameters, Pit next, Pit nextOpposite) {
-		int homePitNumberOfPlayerTwo = parameters.getHomePitNumberOfPlayerTwo();
-		int stones = parameters.getStones();
 		int currentNumber = next.getNumber() - 1;
 
-		Pit current = Pit.createOrdinary(currentNumber, stones, PLAYER_1);
-		Pit currentOpposite = Pit.createOrdinary(homePitNumberOfPlayerTwo - currentNumber, stones, PLAYER_2);
+		Pit current = Pit.createOrdinary(currentNumber, parameters.getStones(), PLAYER_1);
+		Pit currentOpposite = Pit.createOrdinary(calculateNumber(parameters, currentNumber), parameters.getStones(), PLAYER_2);
 
 		linkOppositePits(current, currentOpposite);
 		linkWithNextPit(current, next);
@@ -47,5 +42,9 @@ public class GameBoardCreator {
 			return current;
 		}
 		return createBoard(parameters, current, currentOpposite);
+	}
+
+	private static int calculateNumber(GameBoardParameters parameters, int currentNumber) {
+		return parameters.getHomePitNumberOfPlayerTwo() - currentNumber;
 	}
 }

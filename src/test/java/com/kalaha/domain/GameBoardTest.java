@@ -14,12 +14,11 @@ class GameBoardTest {
 		Pit expected = prepareHead(givenStones);
 
 		GameBoard board = GameBoard.of(givenOrdinaryPitsSize, givenStones);
-		Optional<Pit> headOptional = board.getHead();
+		Pit head = board.getHead();
 
-		assertTrue(headOptional.isPresent());
 
 		Pit expectedPit = expected;
-		Pit actual = headOptional.get();
+		Pit actual = head;
 
 		while(expectedPit.getNumber() < 14){
 			assertThat(expectedPit).isEqualTo(actual);
