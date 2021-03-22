@@ -1,43 +1,27 @@
 package com.kalaha.services.dto;
 
+import com.kalaha.services.Validation;
+import lombok.Getter;
+
+@Getter
 public class AfterMoveResponse {
 	private AfterMove afterMove;
-	private Status response;
+	private Validation result;
 
-	private AfterMoveResponse(Status response) {
-		this.response = response;
+	private AfterMoveResponse(Validation result) {
+		this.result = result;
 	}
 
-	private AfterMoveResponse(AfterMove afterMove, Status response) {
+	private AfterMoveResponse(AfterMove afterMove, Validation result) {
 		this.afterMove = afterMove;
-		this.response = response;
+		this.result = result;
 	}
 
-	public static AfterMoveResponse createGameNotFoundResponse(){
-		return new AfterMoveResponse(Status.GAME_NOT_FOUND);
+	public static AfterMoveResponse createFailedResponse(Validation validation) {
+		return new AfterMoveResponse(validation);
 	}
 
-	public static AfterMoveResponse createNotYourTurnResponse(){
-		return new AfterMoveResponse(Status.NOT_YOUR_TURN);
-	}
-
-	public static AfterMoveResponse createChosenHomePitResponse(){
-		return new AfterMoveResponse(Status.CHOSEN_HOME_PIT);
-	}
-
-	public static AfterMoveResponse createChosenPitWithoutStoneResponse(){
-		return new AfterMoveResponse(Status.CHOSEN_PIT_WITHOUT_STONE);
-	}
-
-	public static AfterMoveResponse createSuccessResponse(AfterMove afterMove){
-		return new AfterMoveResponse(afterMove, Status.SUCCESS);
-	}
-
-	public Status getResponse() {
-		return response;
-	}
-
-	public AfterMove getAfterMove() {
-		return afterMove;
+	public static AfterMoveResponse createSuccessResponse(AfterMove afterMove, Validation result) {
+		return new AfterMoveResponse(afterMove, result);
 	}
 }

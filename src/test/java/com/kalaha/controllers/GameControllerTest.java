@@ -1,6 +1,9 @@
 package com.kalaha.controllers;
 
 import com.kalaha.services.GameService;
+import static com.kalaha.services.Validation.CHOSEN_HOME_PIT;
+import static com.kalaha.services.Validation.GAME_NOT_FOUND;
+import static com.kalaha.services.Validation.NOT_YOUR_TURN;
 import com.kalaha.services.dto.AfterMoveResponse;
 import com.kalaha.services.dto.GameDetails;
 import java.net.URI;
@@ -44,7 +47,7 @@ class GameControllerTest {
 	void shouldReturnNotFoundWhenGameNotExist() throws Exception {
 		long givenGameId = 1;
 		int givenPitId = 1;
-		when(service.makeMove(givenGameId, givenPitId)).thenReturn(AfterMoveResponse.createGameNotFoundResponse());
+		when(service.makeMove(givenGameId, givenPitId)).thenReturn(AfterMoveResponse.createFailedResponse(GAME_NOT_FOUND));
 
 		mockMvc.perform(put(String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId))
 				.contentType(MediaType.APPLICATION_JSON))
@@ -55,7 +58,7 @@ class GameControllerTest {
 	void shouldReturnBadRequestWhenNotYourTurn() throws Exception {
 		long givenGameId = 1;
 		int givenPitId = 1;
-		when(service.makeMove(givenGameId, givenPitId)).thenReturn(AfterMoveResponse.createNotYourTurnResponse());
+		when(service.makeMove(givenGameId, givenPitId)).thenReturn(AfterMoveResponse.createFailedResponse(NOT_YOUR_TURN));
 
 		mockMvc.perform(put(String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId))
 				.contentType(MediaType.APPLICATION_JSON))
@@ -66,7 +69,7 @@ class GameControllerTest {
 	void shouldReturnBadRequestWhenChosenHomePit() throws Exception {
 		long givenGameId = 1;
 		int givenPitId = 1;
-		when(service.makeMove(givenGameId, givenPitId)).thenReturn(AfterMoveResponse.createChosenHomePitResponse());
+		when(service.makeMove(givenGameId, givenPitId)).thenReturn(AfterMoveResponse.createFailedResponse(CHOSEN_HOME_PIT));
 
 		mockMvc.perform(put(String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId))
 				.contentType(MediaType.APPLICATION_JSON))

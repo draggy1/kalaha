@@ -1,6 +1,6 @@
 package com.kalaha.services.dto;
 
-import com.kalaha.domain.Game;
+import com.kalaha.domain.Player;
 import java.net.URI;
 import java.util.Map;
 import lombok.Value;
@@ -10,7 +10,5 @@ public class AfterMove {
 	long id;
 	URI url;
 	Map<Integer, Integer> status;
-	Game.Player player;
-
-
+	Player player;
 }

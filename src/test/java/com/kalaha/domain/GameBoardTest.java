@@ -1,7 +1,5 @@
-package com.kalaha.domain.board;
+package com.kalaha.domain;
 
-import com.kalaha.domain.GameBoard;
-import com.kalaha.domain.Pit;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,25 +15,35 @@ class GameBoardTest {
 
 		GameBoard board = GameBoard.of(givenOrdinaryPitsSize, givenStones);
 		Optional<Pit> headOptional = board.getHead();
+
 		assertTrue(headOptional.isPresent());
-		assertThat(headOptional.get()).isEqualTo(expected);
+
+		Pit expectedPit = expected;
+		Pit actual = headOptional.get();
+
+		while(expectedPit.getNumber() < 14){
+			assertThat(expectedPit).isEqualTo(actual);
+			expectedPit = expectedPit.getNext();
+			actual = actual.getNext();
+		}
+		assertThat(expectedPit).isEqualTo(actual);
 	}
 
 	private Pit prepareHead(int givenStones) {
-		Pit pit1 = Pit.createOrdinaryPit(0, givenStones);
-		Pit pit2 = Pit.createOrdinaryPit(2, givenStones);
-		Pit pit3 = Pit.createOrdinaryPit(3, givenStones);
-		Pit pit4 = Pit.createOrdinaryPit(4, givenStones);
-		Pit pit5 = Pit.createOrdinaryPit(5, givenStones);
-		Pit pit6 = Pit.createOrdinaryPit(6, givenStones);
-		Pit pit7 = Pit.createHomePitPlayerOne(22, 0);
-		Pit pit8 = Pit.createOrdinaryPit(8, givenStones);
-		Pit pit9 = Pit.createOrdinaryPit(9, givenStones);
-		Pit pit10 = Pit.createOrdinaryPit(10, givenStones);
-		Pit pit11 = Pit.createOrdinaryPit(11, givenStones);
-		Pit pit12 = Pit.createOrdinaryPit(12, givenStones);
-		Pit pit13 = Pit.createOrdinaryPit(13, givenStones);
-		Pit pit14 = Pit.createHomePitPlayerTwo(14, 0);
+		Pit pit1 = Pit.createOrdinary(1, givenStones, Player.PLAYER_1);
+		Pit pit2 = Pit.createOrdinary(2, givenStones, Player.PLAYER_1);
+		Pit pit3 = Pit.createOrdinary(3, givenStones, Player.PLAYER_1);
+		Pit pit4 = Pit.createOrdinary(4, givenStones, Player.PLAYER_1);
+		Pit pit5 = Pit.createOrdinary(5, givenStones, Player.PLAYER_1);
+		Pit pit6 = Pit.createOrdinary(6, givenStones, Player.PLAYER_1);
+		Pit pit7 = Pit.createHomeForPlayerOne(7);
+		Pit pit8 = Pit.createOrdinary(8, givenStones, Player.PLAYER_2);
+		Pit pit9 = Pit.createOrdinary(9, givenStones, Player.PLAYER_2);
+		Pit pit10 = Pit.createOrdinary(10, givenStones, Player.PLAYER_2);
+		Pit pit11 = Pit.createOrdinary(11, givenStones, Player.PLAYER_2);
+		Pit pit12 = Pit.createOrdinary(12, givenStones, Player.PLAYER_2);
+		Pit pit13 = Pit.createOrdinary(13, givenStones, Player.PLAYER_2);
+		Pit pit14 = Pit.createHomeForPlayerTwo(14);
 
 		Pit.linkWithNextPit(pit1, pit2);
 		Pit.linkWithNextPit(pit2, pit3);

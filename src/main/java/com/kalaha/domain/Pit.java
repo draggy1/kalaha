@@ -1,33 +1,41 @@
 package com.kalaha.domain;
 
-import com.kalaha.domain.Game.Player;
+import static com.kalaha.domain.Player.PLAYER_1;
+import static com.kalaha.domain.Player.PLAYER_2;
+import static com.kalaha.domain.Stones.createEmpty;
+import static com.kalaha.domain.Type.HOME_PLAYER_1;
+import static com.kalaha.domain.Type.HOME_PLAYER_2;
 import java.util.Objects;
+import lombok.Getter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+@Getter
 public final class Pit {
 	private int number;
-	private int stones;
-	private PitType pitType;
+	private Stones stones;
+	private Type type;
+	private Player owner;
 	private Pit next;
 	private Pit opposite;
 
-	private Pit(int number, int stones, PitType pitType) {
+	private Pit(int number, Stones stones, Type type, Player owner) {
 		this.number = number;
 		this.stones = stones;
-		this.pitType = pitType;
+		this.type = type;
+		this.owner = owner;
 	}
 
-	static Pit createOrdinaryPit(int number, int stones) {
-		return new Pit(number, stones, PitType.ORDINARY);
+	static Pit createOrdinary(int number, int stones, Player owner) {
+		return new Pit(number, Stones.create(stones), Type.ORDINARY, owner);
 	}
 
-	static Pit createHomePitPlayerOne(int number, int stones) {
-		return new Pit(number, stones, PitType.HOME_PLAYER_1);
+	static Pit createHomeForPlayerOne(int number) {
+		return new Pit(number, createEmpty(), HOME_PLAYER_1, PLAYER_1);
 	}
 
-	static Pit createHomePitPlayerTwo(int number, int stones) {
-		return new Pit(number, stones, PitType.HOME_PLAYER_2);
+	static Pit createHomeForPlayerTwo(int number) {
+		return new Pit(number, createEmpty(), HOME_PLAYER_2, PLAYER_2);
 	}
 
 	static void linkOppositePits(Pit next, Pit opposite) {
@@ -43,50 +51,26 @@ public final class Pit {
 		}
 	}
 
-	static void moveStonesBetweenPits(Pit from, Pit to){
-		int numberFrom = from.getNumber();
-		from.setZero();
-		to.stones = to.stones + numberFrom;
+	static void moveStonesBetweenPits(Pit from, Pit to) {
+		int stones = from.stones.getStonesNumber();
+		from.stones.setZero();
+		to.stones.putStones(stones);
 	}
 
-	int getNumber() {
-		return number;
+	boolean canGrabStonesFromOpposite(Player playerWithTurn) {
+		return isOrdinary() && stones.wasLastPitEmpty() && isOwner(playerWithTurn);
 	}
 
-	Pit getOpposite() {
-		return opposite;
+	boolean isOrdinaryOrHome(Player player) {
+		return isOrdinary() || owner == player;
 	}
 
-	Pit getNext() {
-		return next;
+	private boolean isOwner(Player playerWithTurn) {
+		return playerWithTurn == owner;
 	}
 
-	int getStones() {
-		return stones;
-	}
-
-	void setZero() {
-		stones = 0;
-	}
-
-	void putStone() {
-		stones++;
-	}
-
-	boolean isOrdinaryOrHomePitOfPlayer(Player player){
-		return isPitOrdinary() || pitType.access.contains(player);
-	}
-
-	boolean isPitOrdinary() {
-		return pitType == PitType.ORDINARY;
-	}
-
-	boolean hasPitZeroStones(){
-		return getStones() == 0;
-	}
-
-	boolean wasLastPitEmpty(){
-		return getStones() == 1;
+	private boolean isOrdinary() {
+		return type == Type.ORDINARY;
 	}
 
 	@Override
@@ -100,7 +84,8 @@ public final class Pit {
 		return new EqualsBuilder()
 				.append(number, pit.number)
 				.append(stones, pit.stones)
-				.append(pitType, pit.pitType)
+				.append(type, pit.type)
+				.append(owner, pit.owner)
 				.isEquals();
 	}
 
@@ -109,7 +94,8 @@ public final class Pit {
 		return new HashCodeBuilder()
 				.append(number)
 				.append(stones)
-				.append(pitType)
+				.append(type)
+				.append(owner)
 				.toHashCode();
 	}
 }

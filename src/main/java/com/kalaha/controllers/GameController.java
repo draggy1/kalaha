@@ -1,13 +1,15 @@
 package com.kalaha.controllers;
 
 import com.kalaha.services.GameService;
+import com.kalaha.services.Validation;
+import static com.kalaha.services.Validation.CHOSEN_HOME_PIT;
+import static com.kalaha.services.Validation.CHOSEN_PIT_WITHOUT_STONE;
+import static com.kalaha.services.Validation.GAME_NOT_FOUND;
+import static com.kalaha.services.Validation.NOT_YOUR_TURN;
 import com.kalaha.services.dto.AfterMove;
 import com.kalaha.services.dto.AfterMoveResponse;
 import com.kalaha.services.dto.GameDetails;
-import static com.kalaha.services.dto.Status.CHOSEN_HOME_PIT;
-import static com.kalaha.services.dto.Status.CHOSEN_PIT_WITHOUT_STONE;
-import static com.kalaha.services.dto.Status.GAME_NOT_FOUND;
-import static com.kalaha.services.dto.Status.NOT_YOUR_TURN;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,10 +38,11 @@ public class GameController {
 	@PutMapping(value = "/games/{gameId}/pits/{pitId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AfterMove> makeMove(@PathVariable long gameId, @PathVariable int pitId) {
 		AfterMoveResponse afterMoveResponse = gameService.makeMove(gameId, pitId);
-		if (GAME_NOT_FOUND == afterMoveResponse.getResponse()) {
+
+		if (GAME_NOT_FOUND == afterMoveResponse.getResult()) {
 			return ResponseEntity.notFound().build();
 		}
-		if (Set.of(NOT_YOUR_TURN, CHOSEN_HOME_PIT, CHOSEN_PIT_WITHOUT_STONE).contains(afterMoveResponse.getResponse())) {
+		if (Set.of(NOT_YOUR_TURN, CHOSEN_HOME_PIT, CHOSEN_PIT_WITHOUT_STONE).contains(afterMoveResponse.getResult())) {
 			return ResponseEntity.badRequest().build();
 		}
 		return ResponseEntity.ok(afterMoveResponse.getAfterMove());
