@@ -1,0 +1,5 @@
+game:
+  url: http://localhost:8080/
+  ordinary-pits-size: 6
+  stones: 6
+
