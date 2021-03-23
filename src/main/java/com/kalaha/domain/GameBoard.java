@@ -62,7 +62,7 @@ public class GameBoard {
 	Pit findHomeForPlayerWithTurn(Pit last, Player playerWithTurn) {
 		int number = playerWithTurn == PLAYER_1 ? homePitNumberOfPlayerOne : homePitNumberOfPlayerTwo;
 
-		Pit current = last.getNext();
+		Pit current = last;
 		while (current.getNumber() != number) {
 			current = current.getNext();
 		}

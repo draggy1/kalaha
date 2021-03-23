@@ -1,7 +1,8 @@
 package com.kalaha.domain;
 
 import static com.kalaha.domain.Player.PLAYER_1;
-import com.kalaha.services.dto.AfterMove;
+import com.kalaha.services.Validator;
+import com.kalaha.services.dto.Response;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Optional;
@@ -13,24 +14,24 @@ public class Game {
 	private final GameBoard board;
 	private Player playerWithTurn;
 
-	public Game(long gameId, GameBoard board) {
+	public Game(long gameId, GameBoard board, Player whoseTurn) {
 		this.gameId = gameId;
 		this.board = board;
-		this.playerWithTurn = PLAYER_1;
+		this.playerWithTurn = whoseTurn;
 	}
 
 	public void makeMove(int pitId) {
-		Boolean isLastPitHome = Optional.of(board.findPitById(pitId))
+		Boolean isMovedToHomePit = Optional.of(board.findPitById(pitId))
 				.map(pit -> GameBoard.moveStones(pit, playerWithTurn))
 				.map(this::moveStonesIfLastWasEmpty)
-				.map(pit -> board.findHomeForPlayerWithTurn(pit, playerWithTurn) == pit)
+				.map(this::isMovedToHomePit)
 				.orElse(false);
 
-		playerWithTurn = isLastPitHome ? playerWithTurn : changeTurnToNextPlayer();
+		playerWithTurn = isMovedToHomePit ? playerWithTurn : changeTurnToNextPlayer();
 	}
 
-	public AfterMove prepareResponse(URI uri) {
-		return AfterMove.of(gameId, uri, board.prepareStatus(), playerWithTurn);
+	public Response prepareResponse(URI uri, Validator result) {
+		return Response.of(gameId, uri, board.prepareStatus(), playerWithTurn, result.getMessage());
 	}
 
 	public boolean isPitEmpty(int pidId) {
@@ -47,7 +48,7 @@ public class Game {
 		return !board.canPlayersMakeMove();
 	}
 
-	public void handleFinish() {
+	public void handleFinishedGame() {
 		Pit current = board.getHead();
 		Pit homePlayerOne = board.findPitById(board.getHomePitNumberOfPlayerOne());
 
@@ -67,6 +68,10 @@ public class Game {
 			}
 			current = current.getNext();
 		}
+	}
+
+	private boolean isMovedToHomePit(Pit last) {
+		return board.findHomeForPlayerWithTurn(last, playerWithTurn) == last;
 	}
 
 	private Pit moveStonesIfLastWasEmpty(Pit last) {

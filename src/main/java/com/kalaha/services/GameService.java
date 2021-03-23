@@ -3,8 +3,9 @@ package com.kalaha.services;
 import com.kalaha.config.GameConfig;
 import com.kalaha.domain.Game;
 import com.kalaha.domain.GameBoard;
-import com.kalaha.services.dto.AfterMoveResponse;
+import static com.kalaha.domain.Player.PLAYER_1;
 import com.kalaha.services.dto.GameDetails;
+import com.kalaha.services.dto.ResponseWithValidationResult;
 import java.net.URI;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
@@ -27,38 +28,38 @@ public class GameService {
 				.resolve(String.valueOf(gameId));
 
 		GameBoard board = GameBoard.of(config.getOrdinaryPitsSize(), config.getStones());
-		container.addGame(new Game(gameId, board));
+		container.addGame(new Game(gameId, board, PLAYER_1));
 		return GameDetails.of(gameId, uri);
 	}
 
-	public AfterMoveResponse makeMove(long gameId, int pitId) {
+	public ResponseWithValidationResult makeMove(long gameId, int pitId) {
 		Game game = container.getGameContainer().get(gameId);
 
-		Validation result = Validation.validate(game, pitId);
-		return getResponse(pitId, game, result);
+		Validator validator = Validator.validate(game, pitId);
+		return getResponse(pitId, game, validator);
 	}
 
-	private AfterMoveResponse getResponse(int pitId, Game game, Validation result) {
+	private ResponseWithValidationResult getResponse(int pitId, Game game, Validator result) {
 		return switch (result) {
 			case SUCCESS -> handleSuccess(pitId, game, result);
 			case FINISHED -> handleFinish(pitId, game, result);
-			default -> AfterMoveResponse.createFailedResponse(result);
+			default -> ResponseWithValidationResult.of(game.prepareResponse(getUri(pitId, game), result), result);
 		};
 	}
 
-	private AfterMoveResponse handleSuccess(int pitId, Game game, Validation result) {
-		URI uri = getUri(pitId,game);
+	private ResponseWithValidationResult handleSuccess(int pitId, Game game, Validator result) {
+		URI uri = getUri(pitId, game);
 		game.makeMove(pitId);
-		return AfterMoveResponse.createSuccessResponse(game.prepareResponse(uri), result);
+		return ResponseWithValidationResult.of(game.prepareResponse(uri, result), result);
 	}
 
-	private AfterMoveResponse handleFinish(int pitId, Game game, Validation result) {
-		URI uri = getUri(pitId,game);
-		game.handleFinish();
-		return AfterMoveResponse.createSuccessResponse(game.prepareResponse(uri), result);
+	private ResponseWithValidationResult handleFinish(int pitId, Game game, Validator result) {
+		URI uri = getUri(pitId, game);
+		game.handleFinishedGame();
+		return ResponseWithValidationResult.of(game.prepareResponse(uri, result), result);
 	}
 
-	private URI getUri(int pitId, Game game){
+	private URI getUri(int pitId, Game game) {
 		return URI.create(config.getUrl())
 				.resolve(String.format("games/%d/", game.getGameId()))
 				.resolve(String.format("pits/%d", pitId));

@@ -2,7 +2,7 @@ package com.kalaha.domain;
 
 import static com.kalaha.domain.Player.PLAYER_1;
 import static com.kalaha.domain.Player.PLAYER_2;
-import static com.kalaha.domain.Stones.createEmpty;
+import static com.kalaha.domain.Stones.create;
 import static com.kalaha.domain.Type.HOME_PLAYER_1;
 import static com.kalaha.domain.Type.HOME_PLAYER_2;
 import java.util.Objects;
@@ -27,15 +27,15 @@ public final class Pit {
 	}
 
 	static Pit createOrdinary(int number, int stones, Player owner) {
-		return new Pit(number, Stones.create(stones), Type.ORDINARY, owner);
+		return new Pit(number, create(stones), Type.ORDINARY, owner);
 	}
 
-	static Pit createHomeForPlayerOne(int number) {
-		return new Pit(number, createEmpty(), HOME_PLAYER_1, PLAYER_1);
+	static Pit createHomeForPlayerOne(int number, int stonesNumber) {
+		return new Pit(number, create(stonesNumber), HOME_PLAYER_1, PLAYER_1);
 	}
 
-	static Pit createHomeForPlayerTwo(int number) {
-		return new Pit(number, createEmpty(), HOME_PLAYER_2, PLAYER_2);
+	static Pit createHomeForPlayerTwo(int number, int stonesNumber) {
+		return new Pit(number, create(stonesNumber), HOME_PLAYER_2, PLAYER_2);
 	}
 
 	static void linkOppositePits(Pit next, Pit opposite) {

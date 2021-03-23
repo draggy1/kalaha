@@ -9,8 +9,8 @@ import static com.kalaha.domain.Player.PLAYER_2;
 public class GameBoardCreator {
 	private static final int FIRST_PIT_NUMBER = 1;
 	static Pit initBoard(GameBoardParameters parameters) {
-		Pit homePlayerOne = Pit.createHomeForPlayerOne(parameters.getHomePitNumberOfPlayerOne());
-		Pit homePlayerTwo = Pit.createHomeForPlayerTwo(parameters.getHomePitNumberOfPlayerTwo());
+		Pit homePlayerOne = Pit.createHomeForPlayerOne(parameters.getHomePitNumberOfPlayerOne(), 0);
+		Pit homePlayerTwo = Pit.createHomeForPlayerTwo(parameters.getHomePitNumberOfPlayerTwo(), 0);
 
 		Pit homePlayerOnePrevious = Pit.createOrdinary(parameters.getOrdinaryPitsSize(), parameters.getStones(), PLAYER_1);
 		Pit homePlayerOnePreviousOpposite =
