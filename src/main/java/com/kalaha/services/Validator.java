@@ -30,7 +30,7 @@ public enum Validator {
 	}
 
 	private static boolean isNotYourTurn(Game game, int pitId) {
-		int ordinaryPitsSize = game.getBoard().getOrdinaryPitsSize();
+		int ordinaryPitsSize = game.getBoard().getOrdinaryPitsNumber();
 		Player whoMadeMove = pitId <= ordinaryPitsSize ? Player.PLAYER_1 : Player.PLAYER_2;
 		return whoMadeMove != game.whoseTurn();
 	}

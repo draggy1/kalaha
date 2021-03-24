@@ -31,7 +31,7 @@ public class Fixtures {
 		return GameBoard.builder()
 				.homePitNumberOfPlayerOne(7)
 				.homePitNumberOfPlayerTwo(14)
-				.ordinaryPitsSize(6)
+				.ordinaryPitsNumber(6)
 				.head(prepareBoardHead())
 				.build();
 	}
@@ -61,7 +61,7 @@ public class Fixtures {
 		return GameBoard.builder()
 				.homePitNumberOfPlayerOne(7)
 				.homePitNumberOfPlayerTwo(14)
-				.ordinaryPitsSize(6)
+				.ordinaryPitsNumber(6)
 				.head(prepareHeadAfterMove())
 				.build();
 	}
@@ -91,7 +91,7 @@ public class Fixtures {
 		return GameBoard.builder()
 				.homePitNumberOfPlayerOne(7)
 				.homePitNumberOfPlayerTwo(14)
-				.ordinaryPitsSize(6)
+				.ordinaryPitsNumber(6)
 				.head(prepareFinishingBoardHeadWithEmptyAllPitsPlayerOne())
 				.build();
 	}
@@ -121,7 +121,7 @@ public class Fixtures {
 		return GameBoard.builder()
 				.homePitNumberOfPlayerOne(7)
 				.homePitNumberOfPlayerTwo(14)
-				.ordinaryPitsSize(6)
+				.ordinaryPitsNumber(6)
 				.head(prepareFinishingBoardHeadWithEmptyAllPitsPlayerOneAfterHandledFinish())
 				.build();
 	}
@@ -151,7 +151,7 @@ public class Fixtures {
 		return GameBoard.builder()
 				.homePitNumberOfPlayerOne(7)
 				.homePitNumberOfPlayerTwo(14)
-				.ordinaryPitsSize(6)
+				.ordinaryPitsNumber(6)
 				.head(prepareFinishingBoardHeadWithEmptyAllPitsPlayerTwo())
 				.build();
 	}
@@ -181,7 +181,7 @@ public class Fixtures {
 		return GameBoard.builder()
 				.homePitNumberOfPlayerOne(7)
 				.homePitNumberOfPlayerTwo(14)
-				.ordinaryPitsSize(6)
+				.ordinaryPitsNumber(6)
 				.head(prepareFinishingBoardHeadWithEmptyAllPitsPlayerTwoAfterHandledFinish())
 				.build();
 	}
@@ -235,7 +235,7 @@ public class Fixtures {
 		return GameBoard.builder()
 				.homePitNumberOfPlayerOne(7)
 				.homePitNumberOfPlayerTwo(14)
-				.ordinaryPitsSize(6)
+				.ordinaryPitsNumber(6)
 				.head(prepareGivenHeadAfterMoveLandInEmpty())
 				.build();
 	}
@@ -265,7 +265,7 @@ public class Fixtures {
 		return GameBoard.builder()
 				.homePitNumberOfPlayerOne(7)
 				.homePitNumberOfPlayerTwo(14)
-				.ordinaryPitsSize(6)
+				.ordinaryPitsNumber(6)
 				.head(prepareExpectedHandAfterMoveLandInEmpty())
 				.build();
 	}
