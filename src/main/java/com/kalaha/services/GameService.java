@@ -7,19 +7,16 @@ import static com.kalaha.domain.Player.PLAYER_1;
 import com.kalaha.services.dto.GameDetails;
 import com.kalaha.services.dto.ResponseWithValidationResult;
 import java.net.URI;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
 @Service
 @Getter
+@AllArgsConstructor
 public class GameService {
 	private final GameConfig config;
 	private final GameContainer container;
-
-	public GameService(GameConfig config, GameContainer container) {
-		this.config = config;
-		this.container = container;
-	}
 
 	public GameDetails createGame() {
 		long gameId = container.getGameCounter();

@@ -1,5 +1,6 @@
 package com.kalaha.domain;
 
+import static com.kalaha.domain.Fixtures.checkIfBoardIsAsExpected;
 import static com.kalaha.domain.Fixtures.prepareBoard;
 import static com.kalaha.domain.Fixtures.prepareFinishingBoardWithEmptyAllPitsPlayerOne;
 import static com.kalaha.domain.Fixtures.prepareFinishingBoardWithEmptyAllPitsPlayerTwo;
@@ -45,7 +46,7 @@ class GameBoardTest {
 	public void shouldMoveStonesAroundBoard() {
 		GameBoard given = prepareBoard();
 		Pit expectedLast = given.findPitById(14);
-		GameBoard expectedBoard = Fixtures.prepareExpectedBoardAfterMove();
+		GameBoard expectedBoard = Fixtures.prepareExpectedBoardAfterMoveChosenPitWithNumberEightLandInHome();
 
 		Pit movedStonesFromPit = given.findPitById(8);
 		Pit actual = GameBoard.moveStonesAroundBoard(movedStonesFromPit, PLAYER_2);
@@ -77,7 +78,7 @@ class GameBoardTest {
 	@Test
 	void shouldPrepareStatus() {
 		GameBoard given = prepareBoard();
-		Map<Integer, Integer> expected = Fixtures.prepareExpectedStatus();
+		Map<Integer, Integer> expected = Fixtures.prepareStatus();
 
 		assertEquals(expected, given.prepareStatus());
 	}
@@ -98,16 +99,5 @@ class GameBoardTest {
 	void shouldPlayersMakeMove() {
 		GameBoard given = prepareBoard();
 		assertThat(given.canPlayersMakeMove()).isTrue();
-	}
-
-	private void checkIfBoardIsAsExpected(Pit expected, Pit actual) {
-		Pit expectedPit = expected;
-		while (expectedPit.getNumber() < 14) {
-			assertThat(expectedPit).isEqualTo(actual);
-			expectedPit = expectedPit.getNext();
-			actual = actual.getNext();
-		}
-		assertThat(expectedPit).isEqualTo(actual);
-		assertThat(expectedPit.getNext()).isEqualTo(actual.getNext());
 	}
 }

@@ -14,7 +14,6 @@ public class GameBoard {
 	private final int ordinaryPitsSize;
 	private final int homePitNumberOfPlayerOne;
 	private final int homePitNumberOfPlayerTwo;
-	//private final int stones;
 	private final Pit head;
 
 	public static GameBoard of(int ordinaryPitsSize, int stones) {
@@ -26,9 +25,8 @@ public class GameBoard {
 				.build();
 
 		return GameBoard.builder()
-				.homePitNumberOfPlayerOne(parameters.homePitNumberOfPlayerOne)
-				.homePitNumberOfPlayerTwo(parameters.homePitNumberOfPlayerTwo)
-				//.stones(stones)
+				.homePitNumberOfPlayerOne(parameters.getHomePitNumberOfPlayerOne())
+				.homePitNumberOfPlayerTwo(parameters.getHomePitNumberOfPlayerTwo())
 				.ordinaryPitsSize(ordinaryPitsSize)
 				.head(GameBoardCreator.initBoard(parameters))
 				.build();
@@ -100,12 +98,12 @@ public class GameBoard {
 		return 2 * ordinaryPitsSizeOnePlayer + 2;
 	}
 
-	@Value
+	/*@Value
 	@Builder
 	public static class GameBoardParameters {
 		int ordinaryPitsSize;
 		int homePitNumberOfPlayerOne;
 		int homePitNumberOfPlayerTwo;
 		int stones;
-	}
+	}*/
 }

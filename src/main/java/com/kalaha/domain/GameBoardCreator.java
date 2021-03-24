@@ -1,6 +1,5 @@
 package com.kalaha.domain;
 
-import com.kalaha.domain.GameBoard.GameBoardParameters;
 import static com.kalaha.domain.Pit.linkOppositePits;
 import static com.kalaha.domain.Pit.linkWithNextPit;
 import static com.kalaha.domain.Player.PLAYER_1;

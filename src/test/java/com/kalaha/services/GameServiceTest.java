@@ -1,6 +1,7 @@
 package com.kalaha.services;
 
 import com.kalaha.config.GameConfig;
+import static com.kalaha.domain.Fixtures.getUri;
 import static com.kalaha.domain.Fixtures.prepareBoard;
 import static com.kalaha.domain.Fixtures.prepareFinishingBoardWithEmptyAllPitsPlayerOne;
 import com.kalaha.domain.Game;
@@ -42,7 +43,7 @@ public class GameServiceTest {
 	@Test
 	public void shouldMakeSuccessfulMove() {
 		int givenPitId = 2;
-		URI uri = getMakeMoveUri(givenPitId);
+		URI uri = getUri(givenPitId, givenGameId);
 
 		GameBoard givenGameBoard = prepareBoard();
 		givenContainer.addGame(new Game(givenGameId, givenGameBoard, PLAYER_1));
@@ -60,7 +61,7 @@ public class GameServiceTest {
 	@Test
 	public void shouldMakeFinishingMove() {
 		int givenPitId = 9;
-		URI uri = getMakeMoveUri(givenPitId);
+		URI uri = getUri(givenPitId, givenGameId);
 
 		GameBoard givenGameBoard = prepareFinishingBoardWithEmptyAllPitsPlayerOne();
 		givenContainer.addGame(new Game(givenGameId, givenGameBoard, PLAYER_2));
@@ -79,7 +80,7 @@ public class GameServiceTest {
 	public void shouldNotLetMakeMoveBecauseOfNotCorrectTurn() {
 		int givenPitId = 8;
 
-		URI uri = getMakeMoveUri(givenPitId);
+		URI uri = getUri(givenPitId, givenGameId);
 
 		GameBoard givenGameBoard = prepareBoard();
 		givenContainer.addGame(new Game(givenGameId, givenGameBoard, PLAYER_1));
@@ -98,7 +99,7 @@ public class GameServiceTest {
 	public void shouldNotLetMakeMoveBecauseOfChosenHomePit() {
 		int givenPitId = 7;
 
-		URI uri = getMakeMoveUri(givenPitId);
+		URI uri = getUri(givenPitId, givenGameId);
 
 		GameBoard givenGameBoard = prepareBoard();
 		givenContainer.addGame(new Game(givenGameId, givenGameBoard, PLAYER_1));
@@ -117,7 +118,7 @@ public class GameServiceTest {
 	public void shouldNotLetMakeMoveBecauseOfChosenPitWithoutStone() {
 		int givenPitId = 1;
 
-		URI uri = getMakeMoveUri(givenPitId);
+		URI uri = getUri(givenPitId, givenGameId);
 
 		GameBoard givenGameBoard = prepareBoard();
 		givenContainer.addGame(new Game(givenGameId, givenGameBoard, PLAYER_1));
@@ -136,7 +137,7 @@ public class GameServiceTest {
 	public void shouldNotLetMakeMoveBecauseOfNotCorrectChosenStone() {
 		int givenPitId = 28;
 
-		URI uri = getMakeMoveUri(givenPitId);
+		URI uri = getUri(givenPitId, givenGameId);
 
 		GameBoard givenGameBoard = prepareBoard();
 		givenContainer.addGame(new Game(givenGameId, givenGameBoard, PLAYER_1));
@@ -149,12 +150,6 @@ public class GameServiceTest {
 
 		ResponseWithValidationResult responseWithValidationResult = tested.makeMove(givenGameId, givenPitId);
 		assertEquals(expected, responseWithValidationResult);
-	}
-
-	private URI getMakeMoveUri(int givenPitId) {
-		return URI.create("http://test:8080/")
-				.resolve(String.format("games/%d/", givenGameId))
-				.resolve(String.format("pits/%d", givenPitId));
 	}
 
 	private Map<Integer, Integer> prepareStatusSuccessfulMove() {

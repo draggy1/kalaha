@@ -7,6 +7,7 @@ import static com.kalaha.domain.Type.HOME_PLAYER_1;
 import static com.kalaha.domain.Type.HOME_PLAYER_2;
 import java.util.Objects;
 import lombok.Getter;
+import lombok.ToString;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -71,6 +72,16 @@ public final class Pit {
 
 	private boolean isOrdinary() {
 		return type == Type.ORDINARY;
+	}
+
+	@Override
+	public String toString() {
+		return "Pit{" +
+				"number=" + number +
+				", stones=" + stones +
+				", type=" + type +
+				", owner=" + owner +
+				'}';
 	}
 
 	@Override
