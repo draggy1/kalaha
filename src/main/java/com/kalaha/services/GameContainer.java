@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 @Data
 public class GameContainer {
 	private long gameCounter = 1;
-	private final Map<Long, Game> gameContainer = new HashMap<>();
+	private final Map<Long, Game> container = new HashMap<>();
 
 	void addGame(Game game) {
-		gameContainer.put(gameCounter, game);
+		container.put(gameCounter, game);
 		gameCounter++;
 	}
 

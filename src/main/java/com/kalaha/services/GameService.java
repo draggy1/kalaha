@@ -31,7 +31,7 @@ public class GameService {
 	}
 
 	public ResponseWithValidationResult makeMove(long gameId, int pitId) {
-		Game game = container.getGameContainer().get(gameId);
+		Game game = container.getContainer().get(gameId);
 
 		Validator validator = Validator.validate(game, pitId);
 		return getResponse(pitId, game, validator);

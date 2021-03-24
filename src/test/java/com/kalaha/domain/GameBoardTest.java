@@ -25,7 +25,7 @@ class GameBoardTest {
 	}
 
 	@Test
-	public void shouldFindPitById() {
+	void shouldFindPitById() {
 		Pit expected = Pit.createOrdinary(11, 6, PLAYER_2);
 		GameBoard gameBoard = prepareBoard();
 		Pit actual = gameBoard.findPitById(11);
@@ -34,7 +34,7 @@ class GameBoardTest {
 	}
 
 	@Test
-	public void shouldFindHomePitById() {
+	void shouldFindHomePitById() {
 		Pit expected = Pit.createHomeForPlayerTwo(14, 0);
 		GameBoard gameBoard = prepareBoard();
 		Pit actual = gameBoard.findPitById(14);
@@ -43,7 +43,7 @@ class GameBoardTest {
 	}
 
 	@Test
-	public void shouldMoveStonesAroundBoard() {
+	void shouldMoveStonesAroundBoard() {
 		GameBoard given = prepareBoard();
 		Pit expectedLast = given.findPitById(14);
 		GameBoard expectedBoard = Fixtures.prepareExpectedBoardAfterMoveChosenPitWithNumberEightLandInHome();
@@ -56,7 +56,7 @@ class GameBoardTest {
 	}
 
 	@Test
-	public void shouldFindHomeForPlayerOneAsPlayerWithTurn() {
+	void shouldFindHomeForPlayerOneAsPlayerWithTurn() {
 		GameBoard given = prepareBoard();
 		Pit last = given.findPitById(9);
 		Pit expected = given.findPitById(7);
@@ -66,7 +66,7 @@ class GameBoardTest {
 	}
 
 	@Test
-	public void shouldFindHomeForPlayerTwoAsPlayerWithTurn() {
+	void shouldFindHomeForPlayerTwoAsPlayerWithTurn() {
 		GameBoard given = prepareBoard();
 		Pit last = given.findPitById(1);
 		Pit expected = given.findPitById(14);

@@ -25,7 +25,7 @@ public class Game {
 	}
 
 	public void makeMove(int pitId) {
-		Boolean isMovedToHomePit = Optional.of(board.findPitById(pitId))
+		boolean isMovedToHomePit = Optional.of(board.findPitById(pitId))
 				.map(pit -> GameBoard.moveStonesAroundBoard(pit, playerWithTurn))
 				.map(this::moveStonesIfLastWasEmpty)
 				.map(this::isMovedToHomePit)

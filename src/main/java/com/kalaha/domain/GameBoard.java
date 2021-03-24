@@ -95,13 +95,4 @@ public class GameBoard {
 	private static int calculateHomePitNumberOfPlayerTwo(int ordinaryPitsSizeOnePlayer) {
 		return 2 * ordinaryPitsSizeOnePlayer + 2;
 	}
-
-	/*@Value
-	@Builder
-	public static class GameBoardParameters {
-		int ordinaryPitsSize;
-		int homePitNumberOfPlayerOne;
-		int homePitNumberOfPlayerTwo;
-		int stones;
-	}*/
 }
