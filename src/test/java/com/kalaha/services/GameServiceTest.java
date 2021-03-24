@@ -2,7 +2,7 @@ package com.kalaha.services;
 
 import com.kalaha.config.GameConfig;
 import static com.kalaha.domain.Fixtures.prepareBoard;
-import static com.kalaha.domain.Fixtures.prepareFinishingBoard;
+import static com.kalaha.domain.Fixtures.prepareFinishingBoardWithEmptyAllPitsPlayerOne;
 import com.kalaha.domain.Game;
 import com.kalaha.domain.GameBoard;
 import static com.kalaha.domain.Player.PLAYER_1;
@@ -62,7 +62,7 @@ public class GameServiceTest {
 		int givenPitId = 9;
 		URI uri = getMakeMoveUri(givenPitId);
 
-		GameBoard givenGameBoard = prepareFinishingBoard();
+		GameBoard givenGameBoard = prepareFinishingBoardWithEmptyAllPitsPlayerOne();
 		givenContainer.addGame(new Game(givenGameId, givenGameBoard, PLAYER_2));
 
 		Map<Integer, Integer> status = prepareFinishingStatus();

@@ -22,7 +22,7 @@ public class Game {
 
 	public void makeMove(int pitId) {
 		Boolean isMovedToHomePit = Optional.of(board.findPitById(pitId))
-				.map(pit -> GameBoard.moveStones(pit, playerWithTurn))
+				.map(pit -> GameBoard.moveStonesAroundBoard(pit, playerWithTurn))
 				.map(this::moveStonesIfLastWasEmpty)
 				.map(this::isMovedToHomePit)
 				.orElse(false);
@@ -52,8 +52,8 @@ public class Game {
 		Pit current = board.getHead();
 		Pit homePlayerOne = board.findPitById(board.getHomePitNumberOfPlayerOne());
 
-		while (current.getNumber() != board.getHomePitNumberOfPlayerOne()){
-			if(current.getStones().isPitNotEmpty()){
+		while (current.getNumber() != board.getHomePitNumberOfPlayerOne()) {
+			if (current.getStones().isPitNotEmpty()) {
 				Pit.moveStonesBetweenPits(current, homePlayerOne);
 			}
 			current = current.getNext();
@@ -62,8 +62,8 @@ public class Game {
 		current = current.getNext();
 		Pit homePlayerTwo = board.findPitById(board.getHomePitNumberOfPlayerTwo());
 
-		while (current.getNumber() != board.getHomePitNumberOfPlayerTwo()){
-			if(current.getStones().isPitNotEmpty()){
+		while (current.getNumber() != board.getHomePitNumberOfPlayerTwo()) {
+			if (current.getStones().isPitNotEmpty()) {
 				Pit.moveStonesBetweenPits(current, homePlayerTwo);
 			}
 			current = current.getNext();
@@ -75,7 +75,7 @@ public class Game {
 	}
 
 	private Pit moveStonesIfLastWasEmpty(Pit last) {
-		if(last.canGrabStonesFromOpposite(playerWithTurn)){
+		if (last.canGrabStonesFromOpposite(playerWithTurn)) {
 			Pit homePitForPlayerWithTurn = board.findHomeForPlayerWithTurn(last, playerWithTurn);
 			Pit.moveStonesBetweenPits(last.getOpposite(), homePitForPlayerWithTurn);
 			Pit.moveStonesBetweenPits(last, homePitForPlayerWithTurn);

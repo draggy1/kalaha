@@ -14,7 +14,7 @@ public class GameBoard {
 	private final int ordinaryPitsSize;
 	private final int homePitNumberOfPlayerOne;
 	private final int homePitNumberOfPlayerTwo;
-	private final int stones;
+	//private final int stones;
 	private final Pit head;
 
 	public static GameBoard of(int ordinaryPitsSize, int stones) {
@@ -28,7 +28,7 @@ public class GameBoard {
 		return GameBoard.builder()
 				.homePitNumberOfPlayerOne(parameters.homePitNumberOfPlayerOne)
 				.homePitNumberOfPlayerTwo(parameters.homePitNumberOfPlayerTwo)
-				.stones(stones)
+				//.stones(stones)
 				.ordinaryPitsSize(ordinaryPitsSize)
 				.head(GameBoardCreator.initBoard(parameters))
 				.build();
@@ -42,20 +42,19 @@ public class GameBoard {
 		return current;
 	}
 
-	static Pit moveStones(Pit pit, Player playerWithMove) {
+	static Pit moveStonesAroundBoard(Pit pit, Player playerWithMove) {
 		Stones stones = pit.getStones();
 		int stonesNumber = stones.getStonesNumber();
 		stones.setZero();
 
-		Pit current = pit.getNext();
-		while (stonesNumber > 1) {
+		Pit current = pit;
+		while (stonesNumber > 0){
+			current = current.getNext();
 			if (current.isOrdinaryOrHome(playerWithMove)) {
 				current.getStones().putStone();
 				stonesNumber--;
 			}
-			current = current.getNext();
 		}
-		current.getStones().putStone();
 		return current;
 	}
 

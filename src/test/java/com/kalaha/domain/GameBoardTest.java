@@ -1,10 +1,14 @@
 package com.kalaha.domain;
 
+import static com.kalaha.domain.Fixtures.prepareBoard;
+import static com.kalaha.domain.Fixtures.prepareFinishingBoardWithEmptyAllPitsPlayerOne;
+import static com.kalaha.domain.Fixtures.prepareFinishingBoardWithEmptyAllPitsPlayerTwo;
 import static com.kalaha.domain.Fixtures.prepareInitialHead;
 import static com.kalaha.domain.Player.PLAYER_1;
-import java.util.HashMap;
+import static com.kalaha.domain.Player.PLAYER_2;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import org.junit.jupiter.api.Test;
 
 class GameBoardTest {
@@ -14,11 +18,90 @@ class GameBoardTest {
 	@Test
 	void shouldCreateGameBoard() {
 		Pit expected = prepareInitialHead(givenStones);
-
 		GameBoard board = GameBoard.of(givenOrdinaryPitsSize, givenStones);
 
+		checkIfBoardIsAsExpected(expected, board.getHead());
+	}
+
+	@Test
+	public void shouldFindPitById() {
+		Pit expected = Pit.createOrdinary(11, 6, PLAYER_2);
+		GameBoard gameBoard = prepareBoard();
+		Pit actual = gameBoard.findPitById(11);
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void shouldFindHomePitById() {
+		Pit expected = Pit.createHomeForPlayerTwo(14, 0);
+		GameBoard gameBoard = prepareBoard();
+		Pit actual = gameBoard.findPitById(14);
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void shouldMoveStonesAroundBoard() {
+		GameBoard given = prepareBoard();
+		Pit expectedLast = given.findPitById(14);
+		GameBoard expectedBoard = Fixtures.prepareExpectedBoardAfterMove();
+
+		Pit movedStonesFromPit = given.findPitById(8);
+		Pit actual = GameBoard.moveStonesAroundBoard(movedStonesFromPit, PLAYER_2);
+
+		assertEquals(expectedLast, actual);
+		checkIfBoardIsAsExpected(expectedBoard.getHead(), given.getHead());
+	}
+
+	@Test
+	public void shouldFindHomeForPlayerOneAsPlayerWithTurn() {
+		GameBoard given = prepareBoard();
+		Pit last = given.findPitById(9);
+		Pit expected = given.findPitById(7);
+		Pit actual = given.findHomeForPlayerWithTurn(last, PLAYER_1);
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	public void shouldFindHomeForPlayerTwoAsPlayerWithTurn() {
+		GameBoard given = prepareBoard();
+		Pit last = given.findPitById(1);
+		Pit expected = given.findPitById(14);
+		Pit actual = given.findHomeForPlayerWithTurn(last, PLAYER_2);
+
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	void shouldPrepareStatus() {
+		GameBoard given = prepareBoard();
+		Map<Integer, Integer> expected = Fixtures.prepareExpectedStatus();
+
+		assertEquals(expected, given.prepareStatus());
+	}
+
+	@Test
+	void shouldPlayersCanNotMakeMoveBecauseOfPlayerOneHasEmptyAllPits() {
+		GameBoard given = prepareFinishingBoardWithEmptyAllPitsPlayerOne();
+		assertThat(given.canPlayersMakeMove()).isFalse();
+	}
+
+	@Test
+	void shouldPlayersCanNotMakeMoveBecauseOfPlayerTwoHasEmptyAllPits() {
+		GameBoard given = prepareFinishingBoardWithEmptyAllPitsPlayerTwo();
+		assertThat(given.canPlayersMakeMove()).isFalse();
+	}
+
+	@Test
+	void shouldPlayersMakeMove() {
+		GameBoard given = prepareBoard();
+		assertThat(given.canPlayersMakeMove()).isTrue();
+	}
+
+	private void checkIfBoardIsAsExpected(Pit expected, Pit actual) {
 		Pit expectedPit = expected;
-		Pit actual = board.getHead();
 		while (expectedPit.getNumber() < 14) {
 			assertThat(expectedPit).isEqualTo(actual);
 			expectedPit = expectedPit.getNext();
@@ -26,27 +109,5 @@ class GameBoardTest {
 		}
 		assertThat(expectedPit).isEqualTo(actual);
 		assertThat(expectedPit.getNext()).isEqualTo(actual.getNext());
-	}
-
-	@Test
-	public void shouldFindByPit(){
-
-	}
-
-	@Test
-	public void shouldMoveStones() {
-
-	}
-	@Test
-	public void shouldFindHomeForPlayerWithTurn() {
-
-	}
-	@Test
-	void shouldPrepareStatus() {
-
-	}
-	@Test
-	void shouldCheckIfCanPlayersMakeMove() {
-
 	}
 }
