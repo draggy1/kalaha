@@ -4,22 +4,29 @@ import static com.kalaha.domain.Pit.linkOppositePits;
 import static com.kalaha.domain.Pit.linkWithNextPit;
 import static com.kalaha.domain.Player.PLAYER_1;
 import static com.kalaha.domain.Player.PLAYER_2;
+import lombok.Value;
 
+@Value(staticConstructor = "of")
 public class GameBoardCreator {
 	private static final int FIRST_PIT_NUMBER = 1;
-	static Pit initBoard(GameBoardParameters parameters) {
-		Pit homePlayerOne = Pit.createHomeForPlayerOne(parameters.getHomePitNumberOfPlayerOne(), 0);
-		Pit homePlayerTwo = Pit.createHomeForPlayerTwo(parameters.getHomePitNumberOfPlayerTwo(), 0);
+	int stones;
+	int homePitNumberOfPlayerOne;
+	int homePitNumberOfPlayerTwo;
 
-		Pit homePlayerOnePrevious = Pit.createOrdinary(parameters.getOrdinaryPitsSize(), parameters.getStones(), PLAYER_1);
+	Pit initBoard() {
+		Pit homePlayerOne = Pit.createHomeForPlayerOne(homePitNumberOfPlayerOne, 0);
+		Pit homePlayerTwo = Pit.createHomeForPlayerTwo(homePitNumberOfPlayerTwo, 0);
+
+		int pitBeforeHomePlayerOne = homePitNumberOfPlayerOne - 1;
+		Pit homePlayerOnePrevious = Pit.createOrdinary(pitBeforeHomePlayerOne, stones, PLAYER_1);
 		Pit homePlayerOnePreviousOpposite =
-				Pit.createOrdinary(calculateNumber(parameters, parameters.getOrdinaryPitsSize()), parameters.getStones(), PLAYER_2);
+				Pit.createOrdinary(homePitNumberOfPlayerTwo - pitBeforeHomePlayerOne, stones, PLAYER_2);
 
 		linkOppositePits(homePlayerOnePrevious, homePlayerOnePreviousOpposite);
 		linkWithNextPit(homePlayerOnePrevious, homePlayerOne);
 		linkWithNextPit(homePlayerOne, homePlayerOnePreviousOpposite);
 
-		Pit firstPit = createBoard(parameters, homePlayerOnePrevious, homePlayerOnePreviousOpposite);
+		Pit firstPit = createBoard(homePlayerOnePrevious, homePlayerOnePreviousOpposite);
 
 		linkWithNextPit(homePlayerTwo, firstPit);
 		linkWithNextPit(firstPit.getOpposite(), homePlayerTwo);
@@ -27,11 +34,11 @@ public class GameBoardCreator {
 		return firstPit;
 	}
 
-	private static Pit createBoard(GameBoardParameters parameters, Pit next, Pit nextOpposite) {
+	private Pit createBoard(Pit next, Pit nextOpposite) {
 		int currentNumber = next.getNumber() - 1;
 
-		Pit current = Pit.createOrdinary(currentNumber, parameters.getStones(), PLAYER_1);
-		Pit currentOpposite = Pit.createOrdinary(calculateNumber(parameters, currentNumber), parameters.getStones(), PLAYER_2);
+		Pit current = Pit.createOrdinary(currentNumber, stones, PLAYER_1);
+		Pit currentOpposite = Pit.createOrdinary(homePitNumberOfPlayerTwo - currentNumber, stones, PLAYER_2);
 
 		linkOppositePits(current, currentOpposite);
 		linkWithNextPit(current, next);
@@ -40,10 +47,6 @@ public class GameBoardCreator {
 		if (currentNumber == FIRST_PIT_NUMBER) {
 			return current;
 		}
-		return createBoard(parameters, current, currentOpposite);
-	}
-
-	private static int calculateNumber(GameBoardParameters parameters, int currentNumber) {
-		return parameters.getHomePitNumberOfPlayerTwo() - currentNumber;
+		return createBoard(current, currentOpposite);
 	}
 }

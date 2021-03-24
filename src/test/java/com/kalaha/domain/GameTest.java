@@ -102,7 +102,7 @@ class GameTest {
 		Game tested = new Game(1, prepareFinishingBoardWithEmptyAllPitsPlayerOne(), PLAYER_2);
 		tested.handleFinishedGame();
 
-		Fixtures.checkIfBoardIsAsExpected(expected.getHead(), tested.getBoard().getHead());
+		checkIfBoardIsAsExpected(expected.getHead(), tested.getBoard().getHead());
 	}
 
 	@Test
@@ -111,6 +111,6 @@ class GameTest {
 		Game tested = new Game(1, prepareFinishingBoardWithEmptyAllPitsPlayerTwo(), PLAYER_1);
 		tested.handleFinishedGame();
 
-		Fixtures.checkIfBoardIsAsExpected(expected.getHead(), tested.getBoard().getHead());
+		checkIfBoardIsAsExpected(expected.getHead(), tested.getBoard().getHead());
 	}
 }

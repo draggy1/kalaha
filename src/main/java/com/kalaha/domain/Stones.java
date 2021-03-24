@@ -8,7 +8,7 @@ import lombok.Data;
 public class Stones {
 	private int stonesNumber;
 
-	public static Stones create(int stones) {
+	public static Stones of(int stones) {
 		return new Stones(stones);
 	}
 
@@ -21,7 +21,7 @@ public class Stones {
 	}
 
 	void putStones(int stonesNumber) {
-		this.stonesNumber = this.stonesNumber + stonesNumber;
+		this.stonesNumber += stonesNumber;
 	}
 
 	boolean wasLastPitEmpty() {

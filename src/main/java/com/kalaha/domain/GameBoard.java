@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Value;
 
 @Getter
 @Builder
@@ -17,18 +16,17 @@ public class GameBoard {
 	private final Pit head;
 
 	public static GameBoard of(int ordinaryPitsSize, int stones) {
-		GameBoardParameters parameters = GameBoardParameters.builder()
-				.ordinaryPitsSize(ordinaryPitsSize)
-				.stones(stones)
-				.homePitNumberOfPlayerOne(ordinaryPitsSize + 1)
-				.homePitNumberOfPlayerTwo(calculateHomePitNumberOfPlayerTwo(ordinaryPitsSize))
-				.build();
+		int homePitNumberOfPlayerOne = ordinaryPitsSize + 1;
+		int homePitNumberOfPlayerTwo = calculateHomePitNumberOfPlayerTwo(ordinaryPitsSize);
+
+		GameBoardCreator creator = GameBoardCreator.of(stones, homePitNumberOfPlayerOne,
+				homePitNumberOfPlayerTwo);
 
 		return GameBoard.builder()
-				.homePitNumberOfPlayerOne(parameters.getHomePitNumberOfPlayerOne())
-				.homePitNumberOfPlayerTwo(parameters.getHomePitNumberOfPlayerTwo())
+				.homePitNumberOfPlayerOne(homePitNumberOfPlayerOne)
+				.homePitNumberOfPlayerTwo(homePitNumberOfPlayerTwo)
 				.ordinaryPitsSize(ordinaryPitsSize)
-				.head(GameBoardCreator.initBoard(parameters))
+				.head(creator.initBoard())
 				.build();
 	}
 
@@ -46,7 +44,7 @@ public class GameBoard {
 		stones.setZero();
 
 		Pit current = pit;
-		while (stonesNumber > 0){
+		while (stonesNumber > 0) {
 			current = current.getNext();
 			if (current.isOrdinaryOrHome(playerWithMove)) {
 				current.getStones().putStone();

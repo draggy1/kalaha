@@ -2,21 +2,20 @@ package com.kalaha.domain;
 
 import static com.kalaha.domain.Player.PLAYER_1;
 import static com.kalaha.domain.Player.PLAYER_2;
-import static com.kalaha.domain.Stones.create;
+import static com.kalaha.domain.Stones.of;
 import static com.kalaha.domain.Type.HOME_PLAYER_1;
 import static com.kalaha.domain.Type.HOME_PLAYER_2;
 import java.util.Objects;
 import lombok.Getter;
-import lombok.ToString;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @Getter
 public final class Pit {
-	private int number;
-	private Stones stones;
-	private Type type;
-	private Player owner;
+	private final int number;
+	private final Stones stones;
+	private final Type type;
+	private final Player owner;
 	private Pit next;
 	private Pit opposite;
 
@@ -28,15 +27,15 @@ public final class Pit {
 	}
 
 	static Pit createOrdinary(int number, int stones, Player owner) {
-		return new Pit(number, create(stones), Type.ORDINARY, owner);
+		return new Pit(number, of(stones), Type.ORDINARY, owner);
 	}
 
-	static Pit createHomeForPlayerOne(int number, int stonesNumber) {
-		return new Pit(number, create(stonesNumber), HOME_PLAYER_1, PLAYER_1);
+	static Pit createHomeForPlayerOne(int number, int stones) {
+		return new Pit(number, of(stones), HOME_PLAYER_1, PLAYER_1);
 	}
 
-	static Pit createHomeForPlayerTwo(int number, int stonesNumber) {
-		return new Pit(number, create(stonesNumber), HOME_PLAYER_2, PLAYER_2);
+	static Pit createHomeForPlayerTwo(int number, int stones) {
+		return new Pit(number, of(stones), HOME_PLAYER_2, PLAYER_2);
 	}
 
 	static void linkOppositePits(Pit next, Pit opposite) {
@@ -72,16 +71,6 @@ public final class Pit {
 
 	private boolean isOrdinary() {
 		return type == Type.ORDINARY;
-	}
-
-	@Override
-	public String toString() {
-		return "Pit{" +
-				"number=" + number +
-				", stones=" + stones +
-				", type=" + type +
-				", owner=" + owner +
-				'}';
 	}
 
 	@Override
