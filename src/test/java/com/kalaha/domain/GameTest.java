@@ -13,7 +13,6 @@ import static com.kalaha.domain.Fixtures.prepareGivenBoardAfterMoveLandInEmpty;
 import static com.kalaha.domain.Fixtures.prepareStatus;
 import static com.kalaha.domain.Player.PLAYER_1;
 import static com.kalaha.domain.Player.PLAYER_2;
-import static com.kalaha.services.Validator.SUCCESS;
 import com.kalaha.services.dto.Response;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -51,10 +50,10 @@ class GameTest {
 	@Test
 	void shouldPrepareResponse() {
 		GameBoard givenBoard = prepareBoard();
-		Response expected = Response.of(1, getUri(8, 1), prepareStatus(), PLAYER_2, SUCCESS.getMessage());
+		Response expected = Response.of(1, getUri(8, 1), prepareStatus());
 		Game tested = new Game(1, givenBoard, PLAYER_2);
 
-		Response actual = tested.prepareResponse(getUri(8, 1), SUCCESS);
+		Response actual = tested.prepareResponse(getUri(8, 1));
 		assertEquals(expected, actual);
 	}
 

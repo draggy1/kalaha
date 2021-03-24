@@ -291,22 +291,22 @@ public class Fixtures {
 		return pit1;
 	}
 
-	public static Map<Integer, Integer> prepareStatus() {
-		HashMap<Integer, Integer> expectedStatus = new HashMap<>();
-		expectedStatus.put(1, 0);
-		expectedStatus.put(2, 7);
-		expectedStatus.put(3, 7);
-		expectedStatus.put(4, 7);
-		expectedStatus.put(5, 7);
-		expectedStatus.put(6, 7);
-		expectedStatus.put(7, 1);
-		expectedStatus.put(8, 6);
-		expectedStatus.put(9, 6);
-		expectedStatus.put(10, 6);
-		expectedStatus.put(11, 6);
-		expectedStatus.put(12, 6);
-		expectedStatus.put(13, 6);
-		expectedStatus.put(14, 0);
+	public static Map<String, String> prepareStatus() {
+		HashMap<String, String> expectedStatus = new HashMap<>();
+		expectedStatus.put("1", "0");
+		expectedStatus.put("2", "7");
+		expectedStatus.put("3", "7");
+		expectedStatus.put("4", "7");
+		expectedStatus.put("5", "7");
+		expectedStatus.put("6", "7");
+		expectedStatus.put("7", "1");
+		expectedStatus.put("8", "6");
+		expectedStatus.put("9", "6");
+		expectedStatus.put("10", "6");
+		expectedStatus.put("11", "6");
+		expectedStatus.put("12", "6");
+		expectedStatus.put("13", "6");
+		expectedStatus.put("14", "0");
 
 		return expectedStatus;
 	}
@@ -322,9 +322,10 @@ public class Fixtures {
 		assertThat(expectedPit.getNext()).isEqualTo(actual.getNext());
 	}
 
-	public static URI getUri(int givenPitId, int givenGameId) {
+	public static String getUri(int givenPitId, int givenGameId) {
 		return URI.create("http://test:8080/")
 				.resolve(String.format("games/%d/", givenGameId))
-				.resolve(String.format("pits/%d", givenPitId));
+				.resolve(String.format("pits/%d", givenPitId))
+				.toString();
 	}
 }

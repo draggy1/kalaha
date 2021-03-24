@@ -1,17 +1,21 @@
 package com.kalaha.domain;
 
 import static com.kalaha.domain.Player.PLAYER_1;
-import com.kalaha.services.Validator;
 import com.kalaha.services.dto.Response;
-import java.net.URI;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.Arrays;
 import java.util.Optional;
 import lombok.Getter;
 
 @Getter
+@ApiModel("Single game representation")
 public class Game {
+	@ApiModelProperty(notes = "Unique id of game", name = "gameId")
 	private final long gameId;
+	@ApiModelProperty(notes = "Representation of game board", name = "board")
 	private final GameBoard board;
+	@ApiModelProperty(notes = "Player who has current turn", name = "playerWithTurn")
 	private Player playerWithTurn;
 
 	public Game(long gameId, GameBoard board, Player whoseTurn) {
@@ -30,8 +34,8 @@ public class Game {
 		playerWithTurn = isMovedToHomePit ? playerWithTurn : changeTurnToNextPlayer();
 	}
 
-	public Response prepareResponse(URI uri, Validator result) {
-		return Response.of(gameId, uri, board.prepareStatus(), playerWithTurn, result.getMessage());
+	public Response prepareResponse(String uri) {
+		return Response.of(gameId, uri, board.prepareStatus());
 	}
 
 	public boolean isPitEmpty(int pidId) {

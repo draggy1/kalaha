@@ -78,7 +78,7 @@ class GameBoardTest {
 	@Test
 	void shouldPrepareStatus() {
 		GameBoard given = prepareBoard();
-		Map<Integer, Integer> expected = Fixtures.prepareStatus();
+		Map<String, String> expected = Fixtures.prepareStatus();
 
 		assertEquals(expected, given.prepareStatus());
 	}

@@ -12,7 +12,7 @@ public class GameContainer {
 	private long gameCounter = 1;
 	private final Map<Long, Game> gameContainer = new HashMap<>();
 
-	void addGame(Game game){
+	void addGame(Game game) {
 		gameContainer.put(gameCounter, game);
 		gameCounter++;
 	}

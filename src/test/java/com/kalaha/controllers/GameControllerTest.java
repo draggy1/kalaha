@@ -1,6 +1,5 @@
 package com.kalaha.controllers;
 
-import com.kalaha.domain.Player;
 import com.kalaha.services.GameService;
 import static com.kalaha.services.Validator.CHOSEN_HOME_PIT;
 import static com.kalaha.services.Validator.CHOSEN_PIT_WITHOUT_STONE;
@@ -11,7 +10,6 @@ import static com.kalaha.services.Validator.SUCCESS;
 import com.kalaha.services.dto.GameDetails;
 import com.kalaha.services.dto.Response;
 import com.kalaha.services.dto.ResponseWithValidationResult;
-import java.net.URI;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +38,7 @@ class GameControllerTest {
 
 	@Test
 	void shouldCreateGameSuccessfully() throws Exception {
-		when(service.createGame()).thenReturn(GameDetails.of(1, URI.create("http://localhost:8080/games/1")));
+		when(service.createGame()).thenReturn(GameDetails.of(1, "http://localhost:8080/games/1"));
 
 		mockMvc.perform(post("http://localhost:8080/games")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -54,7 +52,7 @@ class GameControllerTest {
 		long givenGameId = 1;
 		int givenPitId = 1;
 		String givenUrl = String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId);
-		Response response = Response.of(givenGameId, URI.create(givenUrl), Map.of(), Player.PLAYER_1, GAME_NOT_FOUND.getMessage());
+		Response response = Response.of(givenGameId, givenUrl, Map.of());
 		when(service.makeMove(givenGameId, givenPitId)).thenReturn(ResponseWithValidationResult.of(response, GAME_NOT_FOUND));
 
 		mockMvc.perform(put(String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId))
@@ -67,7 +65,7 @@ class GameControllerTest {
 		long givenGameId = 1;
 		int givenPitId = 1;
 		String givenUrl = String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId);
-		Response response = Response.of(givenGameId, URI.create(givenUrl), Map.of(), Player.PLAYER_1, NOT_YOUR_TURN.getMessage());
+		Response response = Response.of(givenGameId, givenUrl, Map.of());
 		when(service.makeMove(givenGameId, givenPitId)).thenReturn(ResponseWithValidationResult.of(response, NOT_YOUR_TURN));
 
 		mockMvc.perform(put(String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId))
@@ -80,7 +78,7 @@ class GameControllerTest {
 		long givenGameId = 1;
 		int givenPitId = 1;
 		String givenUrl = String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId);
-		Response response = Response.of(givenGameId, URI.create(givenUrl), Map.of(), Player.PLAYER_1, CHOSEN_HOME_PIT.getMessage());
+		Response response = Response.of(givenGameId, givenUrl, Map.of());
 		when(service.makeMove(givenGameId, givenPitId)).thenReturn(ResponseWithValidationResult.of(response, CHOSEN_HOME_PIT));
 
 		mockMvc.perform(put(String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId))
@@ -93,7 +91,7 @@ class GameControllerTest {
 		long givenGameId = 1;
 		int givenPitId = 1;
 		String givenUrl = String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId);
-		Response response = Response.of(givenGameId, URI.create(givenUrl), Map.of(), Player.PLAYER_1, CHOSEN_PIT_WITHOUT_STONE.getMessage());
+		Response response = Response.of(givenGameId, givenUrl, Map.of());
 		when(service.makeMove(givenGameId, givenPitId)).thenReturn(ResponseWithValidationResult.of(response, CHOSEN_PIT_WITHOUT_STONE));
 
 		mockMvc.perform(put(String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId))
@@ -106,7 +104,7 @@ class GameControllerTest {
 		long givenGameId = 1;
 		int givenPitId = 1;
 		String givenUrl = String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId);
-		Response response = Response.of(givenGameId, URI.create(givenUrl), Map.of(), Player.PLAYER_1, FINISHED.getMessage());
+		Response response = Response.of(givenGameId, givenUrl, Map.of());
 		when(service.makeMove(givenGameId, givenPitId)).thenReturn(ResponseWithValidationResult.of(response, FINISHED));
 
 		mockMvc.perform(put(givenUrl)
@@ -121,7 +119,7 @@ class GameControllerTest {
 		long givenGameId = 1;
 		int givenPitId = 1;
 		String givenUrl = String.format("http://localhost:8080/games/%d/pits/%d", givenGameId, givenPitId);
-		Response response = Response.of(givenGameId, URI.create(givenUrl), Map.of(), Player.PLAYER_1, SUCCESS.getMessage());
+		Response response = Response.of(givenGameId, givenUrl, Map.of());
 		when(service.makeMove(givenGameId, givenPitId)).thenReturn(ResponseWithValidationResult.of(response, SUCCESS));
 
 		mockMvc.perform(put(givenUrl)

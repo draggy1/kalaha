@@ -64,14 +64,14 @@ public class GameBoard {
 		return current;
 	}
 
-	Map<Integer, Integer> prepareStatus() {
-		Map<Integer, Integer> status = new HashMap<>();
+	Map<String, String> prepareStatus() {
+		Map<String, String> status = new HashMap<>();
 		Pit current = head;
 		while (current.getNumber() != homePitNumberOfPlayerTwo) {
-			status.put(current.getNumber(), current.getStones().getStonesNumber());
+			status.put(String.valueOf(current.getNumber()), String.valueOf(current.getStones().getStonesNumber()));
 			current = current.getNext();
 		}
-		status.put(current.getNumber(), current.getStones().getStonesNumber());
+		status.put(String.valueOf(current.getNumber()), String.valueOf(current.getStones().getStonesNumber()));
 		return status;
 	}
 

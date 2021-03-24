@@ -20,9 +20,10 @@ public class GameService {
 
 	public GameDetails createGame() {
 		long gameId = container.getGameCounter();
-		URI uri = URI.create(config.getUrl())
+		String uri = URI.create(config.getUrl())
 				.resolve("games/")
-				.resolve(String.valueOf(gameId));
+				.resolve(String.valueOf(gameId))
+				.toString();
 
 		GameBoard board = GameBoard.of(config.getOrdinaryPitsSize(), config.getStones());
 		container.addGame(new Game(gameId, board, PLAYER_1));
@@ -40,25 +41,26 @@ public class GameService {
 		return switch (result) {
 			case SUCCESS -> handleSuccess(pitId, game, result);
 			case FINISHED -> handleFinish(pitId, game, result);
-			default -> ResponseWithValidationResult.of(game.prepareResponse(getUri(pitId, game), result), result);
+			default -> ResponseWithValidationResult.of(game.prepareResponse(getUri(pitId, game)), result);
 		};
 	}
 
 	private ResponseWithValidationResult handleSuccess(int pitId, Game game, Validator result) {
-		URI uri = getUri(pitId, game);
+		String uri = getUri(pitId, game);
 		game.makeMove(pitId);
-		return ResponseWithValidationResult.of(game.prepareResponse(uri, result), result);
+		return ResponseWithValidationResult.of(game.prepareResponse(uri), result);
 	}
 
 	private ResponseWithValidationResult handleFinish(int pitId, Game game, Validator result) {
-		URI uri = getUri(pitId, game);
+		String uri = getUri(pitId, game);
 		game.handleFinishedGame();
-		return ResponseWithValidationResult.of(game.prepareResponse(uri, result), result);
+		return ResponseWithValidationResult.of(game.prepareResponse(uri), result);
 	}
 
-	private URI getUri(int pitId, Game game) {
+	private String getUri(int pitId, Game game) {
 		return URI.create(config.getUrl())
 				.resolve(String.format("games/%d/", game.getGameId()))
-				.resolve(String.format("pits/%d", pitId));
+				.resolve(String.format("pits/%d", pitId))
+				.toString();
 	}
 }

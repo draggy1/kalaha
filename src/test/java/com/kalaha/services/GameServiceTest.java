@@ -17,7 +17,6 @@ import static com.kalaha.services.Validator.SUCCESS;
 import com.kalaha.services.dto.GameDetails;
 import com.kalaha.services.dto.Response;
 import com.kalaha.services.dto.ResponseWithValidationResult;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import static org.junit.Assert.assertEquals;
@@ -35,7 +34,7 @@ public class GameServiceTest {
 
 	@Test
 	public void shouldCreateGame() {
-		GameDetails expected = GameDetails.of(1, URI.create("http://test:8080/games/1"));
+		GameDetails expected = GameDetails.of(1, "http://test:8080/games/1");
 		GameService tested = new GameService(givenConfig, new GameContainer());
 		assertEquals(expected, tested.createGame());
 	}
@@ -43,14 +42,13 @@ public class GameServiceTest {
 	@Test
 	public void shouldMakeSuccessfulMove() {
 		int givenPitId = 2;
-		URI uri = getUri(givenPitId, givenGameId);
+		String uri = getUri(givenPitId, givenGameId);
 
 		GameBoard givenGameBoard = prepareBoard();
 		givenContainer.addGame(new Game(givenGameId, givenGameBoard, PLAYER_1));
 
-		Map<Integer, Integer> status = prepareStatusSuccessfulMove();
-		ResponseWithValidationResult expected = ResponseWithValidationResult.of(
-				Response.of(givenGameId, uri, status, PLAYER_2, SUCCESS.getMessage()), SUCCESS);
+		Map<String, String> status = prepareStatusSuccessfulMove();
+		ResponseWithValidationResult expected = ResponseWithValidationResult.of(Response.of(givenGameId, uri, status), SUCCESS);
 
 		GameService tested = new GameService(givenConfig, givenContainer);
 
@@ -61,14 +59,13 @@ public class GameServiceTest {
 	@Test
 	public void shouldMakeFinishingMove() {
 		int givenPitId = 9;
-		URI uri = getUri(givenPitId, givenGameId);
+		String uri = getUri(givenPitId, givenGameId);
 
 		GameBoard givenGameBoard = prepareFinishingBoardWithEmptyAllPitsPlayerOne();
 		givenContainer.addGame(new Game(givenGameId, givenGameBoard, PLAYER_2));
 
-		Map<Integer, Integer> status = prepareFinishingStatus();
-		ResponseWithValidationResult expected = ResponseWithValidationResult.of(
-				Response.of(givenGameId, uri, status, PLAYER_2, FINISHED.getMessage()), FINISHED);
+		Map<String, String> status = prepareFinishingStatus();
+		ResponseWithValidationResult expected = ResponseWithValidationResult.of(Response.of(givenGameId, uri, status), FINISHED);
 
 		GameService tested = new GameService(givenConfig, givenContainer);
 
@@ -80,14 +77,13 @@ public class GameServiceTest {
 	public void shouldNotLetMakeMoveBecauseOfNotCorrectTurn() {
 		int givenPitId = 8;
 
-		URI uri = getUri(givenPitId, givenGameId);
+		String uri = getUri(givenPitId, givenGameId);
 
 		GameBoard givenGameBoard = prepareBoard();
 		givenContainer.addGame(new Game(givenGameId, givenGameBoard, PLAYER_1));
 
-		Map<Integer, Integer> status = prepareStatus1();
-		ResponseWithValidationResult expected = ResponseWithValidationResult.of(
-				Response.of(givenGameId, uri, status, PLAYER_1, NOT_YOUR_TURN.getMessage()), NOT_YOUR_TURN);
+		Map<String, String> status = prepareStatus();
+		ResponseWithValidationResult expected = ResponseWithValidationResult.of(Response.of(givenGameId, uri, status), NOT_YOUR_TURN);
 
 		GameService tested = new GameService(givenConfig, givenContainer);
 
@@ -99,14 +95,13 @@ public class GameServiceTest {
 	public void shouldNotLetMakeMoveBecauseOfChosenHomePit() {
 		int givenPitId = 7;
 
-		URI uri = getUri(givenPitId, givenGameId);
+		String uri = getUri(givenPitId, givenGameId);
 
 		GameBoard givenGameBoard = prepareBoard();
 		givenContainer.addGame(new Game(givenGameId, givenGameBoard, PLAYER_1));
 
-		Map<Integer, Integer> status = prepareStatus1();
-		ResponseWithValidationResult expected = ResponseWithValidationResult.of(
-				Response.of(givenGameId, uri, status, PLAYER_1, CHOSEN_HOME_PIT.getMessage()), CHOSEN_HOME_PIT);
+		Map<String, String> status = prepareStatus();
+		ResponseWithValidationResult expected = ResponseWithValidationResult.of(Response.of(givenGameId, uri, status), CHOSEN_HOME_PIT);
 
 		GameService tested = new GameService(givenConfig, givenContainer);
 
@@ -118,14 +113,13 @@ public class GameServiceTest {
 	public void shouldNotLetMakeMoveBecauseOfChosenPitWithoutStone() {
 		int givenPitId = 1;
 
-		URI uri = getUri(givenPitId, givenGameId);
+		String uri = getUri(givenPitId, givenGameId);
 
 		GameBoard givenGameBoard = prepareBoard();
 		givenContainer.addGame(new Game(givenGameId, givenGameBoard, PLAYER_1));
 
-		Map<Integer, Integer> status = prepareStatus1();
-		ResponseWithValidationResult expected = ResponseWithValidationResult.of(
-				Response.of(givenGameId, uri, status, PLAYER_1, CHOSEN_PIT_WITHOUT_STONE.getMessage()), CHOSEN_PIT_WITHOUT_STONE);
+		Map<String, String> status = prepareStatus();
+		ResponseWithValidationResult expected = ResponseWithValidationResult.of(Response.of(givenGameId, uri, status), CHOSEN_PIT_WITHOUT_STONE);
 
 		GameService tested = new GameService(givenConfig, givenContainer);
 
@@ -137,14 +131,13 @@ public class GameServiceTest {
 	public void shouldNotLetMakeMoveBecauseOfNotCorrectChosenStone() {
 		int givenPitId = 28;
 
-		URI uri = getUri(givenPitId, givenGameId);
+		String uri = getUri(givenPitId, givenGameId);
 
 		GameBoard givenGameBoard = prepareBoard();
 		givenContainer.addGame(new Game(givenGameId, givenGameBoard, PLAYER_1));
 
-		Map<Integer, Integer> status = prepareStatus1();
-		ResponseWithValidationResult expected = ResponseWithValidationResult.of(
-				Response.of(givenGameId, uri, status, PLAYER_1, NOT_CORRECT_PIT_NUMBER.getMessage()), NOT_CORRECT_PIT_NUMBER);
+		Map<String, String> status = prepareStatus();
+		ResponseWithValidationResult expected = ResponseWithValidationResult.of(Response.of(givenGameId, uri, status), NOT_CORRECT_PIT_NUMBER);
 
 		GameService tested = new GameService(givenConfig, givenContainer);
 
@@ -152,48 +145,48 @@ public class GameServiceTest {
 		assertEquals(expected, responseWithValidationResult);
 	}
 
-	private Map<Integer, Integer> prepareStatusSuccessfulMove() {
-		HashMap<Integer, Integer> status = new HashMap<>();
+	private Map<String, String> prepareStatusSuccessfulMove() {
+		HashMap<String, String> status = new HashMap<>();
 		for (int i = 1; i < 3; i++) {
-			status.put(i, 0);
+			status.put(String.valueOf(i), "0");
 		}
 		for (int i = 3; i < 7; i++) {
-			status.put(i, 8);
+			status.put(String.valueOf(i), "8");
 		}
-		status.put(7, 2);
-		status.put(8, 7);
-		status.put(9, 7);
+		status.put("7", "2");
+		status.put("8", "7");
+		status.put("9", "7");
 		for (int i = 10; i < 14; i++) {
-			status.put(i, 6);
+			status.put(String.valueOf(i), "6");
 		}
-		status.put(14, 0);
+		status.put("14", "0");
 		return status;
 	}
 
-	private Map<Integer, Integer> prepareStatus1() {
-		HashMap<Integer, Integer> status = new HashMap<>();
-		status.put(1, 0);
+	private Map<String, String> prepareStatus() {
+		HashMap<String, String> status = new HashMap<>();
+		status.put("1", "0");
 		for (int i = 2; i < 7; i++) {
-			status.put(i, 7);
+			status.put(String.valueOf(i), "7");
 		}
-		status.put(7, 1);
+		status.put("7", "1");
 		for (int i = 8; i < 14; i++) {
-			status.put(i, 6);
+			status.put(String.valueOf(i), "6");
 		}
-		status.put(14, 0);
+		status.put("14", "0");
 		return status;
 	}
 
-	private Map<Integer, Integer> prepareFinishingStatus() {
-		HashMap<Integer, Integer> status = new HashMap<>();
+	private Map<String, String> prepareFinishingStatus() {
+		HashMap<String, String> status = new HashMap<>();
 		for (int i = 1; i < 7; i++) {
-			status.put(i, 0);
+			status.put(String.valueOf(i), "0");
 		}
-		status.put(7, 34);
+		status.put("7", "34");
 		for (int i = 8; i < 14; i++) {
-			status.put(i, 0);
+			status.put(String.valueOf(i), "0");
 		}
-		status.put(14, 32);
+		status.put("14", "32");
 		return status;
 	}
 }
