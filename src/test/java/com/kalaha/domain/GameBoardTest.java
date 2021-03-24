@@ -49,7 +49,7 @@ class GameBoardTest {
 		GameBoard expectedBoard = Fixtures.prepareExpectedBoardAfterMoveChosenPitWithNumberEightLandInHome();
 
 		Pit movedStonesFromPit = given.findPitById(8);
-		Pit actual = GameBoard.moveStonesAroundBoard(movedStonesFromPit, PLAYER_2);
+		Pit actual = GameBoard.scatterStonesAroundBoard(movedStonesFromPit, PLAYER_2);
 
 		assertEquals(expectedLast, actual);
 		checkIfBoardIsAsExpected(expectedBoard.getHead(), given.getHead());

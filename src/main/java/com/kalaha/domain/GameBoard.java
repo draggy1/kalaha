@@ -38,7 +38,7 @@ public class GameBoard {
 		return current;
 	}
 
-	static Pit moveStonesAroundBoard(Pit pit, Player playerWithMove) {
+	static Pit scatterStonesAroundBoard(Pit pit, Player playerWithMove) {
 		Stones stones = pit.getStones();
 		int stonesNumber = stones.getStonesNumber();
 		stones.setZero();

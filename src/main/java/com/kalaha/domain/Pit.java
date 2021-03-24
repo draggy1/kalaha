@@ -51,7 +51,7 @@ public final class Pit {
 		}
 	}
 
-	static void moveStonesBetweenPits(Pit from, Pit to) {
+	static void moveStonesToPit(Pit from, Pit to) {
 		int stones = from.stones.getStonesNumber();
 		from.stones.setZero();
 		to.stones.putStones(stones);

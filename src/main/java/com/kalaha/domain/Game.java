@@ -24,65 +24,98 @@ public class Game {
 		this.playerWithTurn = whoseTurn;
 	}
 
+	/**
+	 * Method responsible for handling move provided by player. Method:
+	 * 1. Finds pit with provided param
+	 * 2. Gets stones and scatter around the board
+	 * 3. Handle situation when last pit is empty
+	 * 4. Handle situation when last pit is home pit
+	 *
+	 * @param pitId unique pit id
+	 */
 	public void makeMove(int pitId) {
 		boolean isMovedToHomePit = Optional.of(board.findPitById(pitId))
-				.map(pit -> GameBoard.moveStonesAroundBoard(pit, playerWithTurn))
+				.map(pit -> GameBoard.scatterStonesAroundBoard(pit, playerWithTurn))
 				.map(this::moveStonesIfLastWasEmpty)
-				.map(this::isMovedToHomePit)
+				.map(this::isLastStoneScatteredToHomePit)
 				.orElse(false);
 
 		playerWithTurn = isMovedToHomePit ? playerWithTurn : changeTurnToNextPlayer();
 	}
 
+	/**
+	 * Method prepares {@link Response} to return
+	 *
+	 * @param uri uri address used in response
+	 * @return response of api call
+	 */
 	public Response prepareResponse(String uri) {
 		return Response.of(gameId, uri, board.prepareStatus());
 	}
 
+	/**
+	 * Checks if pit with provided id is empty
+	 *
+	 * @param pidId pitId unique pit id
+	 * @return true when pit is empty, false when pit contains stones
+	 */
 	public boolean isPitEmpty(int pidId) {
 		return Optional.of(board.findPitById(pidId))
 				.map(pit -> pit.getStones().isPitEmpty())
 				.orElse(true);
 	}
 
+	/**
+	 * Checks who the turn belongs to
+	 *
+	 * @return Player who the turn belongs to
+	 */
 	public Player whoseTurn() {
 		return playerWithTurn;
 	}
 
+	/**
+	 * Checks who the turn belongs to
+	 *
+	 * @return Player who the turn belongs to
+	 */
 	public boolean isGameFinished() {
 		return !board.canPlayersMakeMove();
 	}
 
+	/**
+	 * Method handles board when one player has empty all pits
+	 */
 	public void handleFinishedGame() {
-		Pit current = board.getHead();
 		Pit homePlayerOne = board.findPitById(board.getHomePitNumberOfPlayerOne());
-
-		while (current.getNumber() != board.getHomePitNumberOfPlayerOne()) {
-			if (current.getStones().isPitNotEmpty()) {
-				Pit.moveStonesBetweenPits(current, homePlayerOne);
-			}
-			current = current.getNext();
-		}
-
-		current = current.getNext();
 		Pit homePlayerTwo = board.findPitById(board.getHomePitNumberOfPlayerTwo());
 
-		while (current.getNumber() != board.getHomePitNumberOfPlayerTwo()) {
+		Pit current = board.getHead();
+		current = moveAllStonesToHome(homePlayerOne, current);
+
+		current = current.getNext();
+		moveAllStonesToHome(homePlayerTwo, current);
+	}
+
+	private Pit moveAllStonesToHome(Pit homePlayer, Pit current) {
+		while (current.getNumber() != homePlayer.getNumber()) {
 			if (current.getStones().isPitNotEmpty()) {
-				Pit.moveStonesBetweenPits(current, homePlayerTwo);
+				Pit.moveStonesToPit(current, homePlayer);
 			}
 			current = current.getNext();
 		}
+		return current;
 	}
 
-	private boolean isMovedToHomePit(Pit last) {
+	private boolean isLastStoneScatteredToHomePit(Pit last) {
 		return board.findHomeForPlayerWithTurn(last, playerWithTurn) == last;
 	}
 
 	private Pit moveStonesIfLastWasEmpty(Pit last) {
 		if (last.canGrabStonesFromOpposite(playerWithTurn)) {
 			Pit homePitForPlayerWithTurn = board.findHomeForPlayerWithTurn(last, playerWithTurn);
-			Pit.moveStonesBetweenPits(last.getOpposite(), homePitForPlayerWithTurn);
-			Pit.moveStonesBetweenPits(last, homePitForPlayerWithTurn);
+			Pit.moveStonesToPit(last.getOpposite(), homePitForPlayerWithTurn);
+			Pit.moveStonesToPit(last, homePitForPlayerWithTurn);
 		}
 		return last;
 	}
