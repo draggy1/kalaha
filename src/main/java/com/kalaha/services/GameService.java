@@ -11,6 +11,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
+/**
+ * Represents service class of game
+ */
 @Service
 @Getter
 @AllArgsConstructor
@@ -18,6 +21,11 @@ public class GameService {
 	private final GameConfig config;
 	private final GameContainer container;
 
+	/**
+	 * Method which creates a single game
+	 *
+	 * @return {@link GameDetails} which contains url and id
+	 */
 	public GameDetails createGame() {
 		long gameId = container.getGameCounter();
 		String uri = URI.create(config.getUrl())
@@ -30,6 +38,13 @@ public class GameService {
 		return GameDetails.of(gameId, uri);
 	}
 
+	/**
+	 * Method runs making move by player
+	 *
+	 * @param gameId unique id of the game
+	 * @param pitId  unique id of the pit
+	 * @return {@link ResponseWithValidationResult} returns response returned in endpoint with validation result
+	 */
 	public ResponseWithValidationResult makeMove(long gameId, int pitId) {
 		Game game = container.getContainer().get(gameId);
 
