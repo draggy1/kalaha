@@ -26,7 +26,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+/**
+ * Test suite for {@link GameController}
+ */
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = GameController.class)
 class GameControllerTest {
@@ -128,6 +130,4 @@ class GameControllerTest {
 				.andExpect(jsonPath("$.id").value(1))
 				.andExpect(jsonPath("$.url").value(givenUrl));
 	}
-
-
 }

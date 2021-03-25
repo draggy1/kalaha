@@ -10,6 +10,9 @@ import lombok.Getter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+/**
+ * Class represent single pit
+ */
 @Getter
 public final class Pit {
 	private final int number;
@@ -38,30 +41,60 @@ public final class Pit {
 		return new Pit(number, of(stones), HOME_PLAYER_2, PLAYER_2);
 	}
 
-	static void linkOppositePits(Pit next, Pit opposite) {
-		if (Objects.nonNull(next) && Objects.nonNull(opposite)) {
-			next.opposite = opposite;
-			opposite.opposite = next;
+	/**
+	 * Method links together two opposite pits
+	 *
+	 * @param current  handled pit
+	 * @param opposite to current
+	 */
+	static void linkOppositePits(Pit current, Pit opposite) {
+		if (Objects.nonNull(current) && Objects.nonNull(opposite)) {
+			current.opposite = opposite;
+			opposite.opposite = current;
 		}
 	}
 
+	/**
+	 * Method links together current pit with next
+	 *
+	 * @param current handled pit
+	 * @param next    to current
+	 */
 	static void linkWithNextPit(Pit current, Pit next) {
 		if (Objects.nonNull(current)) {
 			current.next = next;
 		}
 	}
 
+	/**
+	 * Method moves stones from one pit to another
+	 *
+	 * @param from pit from which are moved stones
+	 * @param to   pit to which are moved stones
+	 */
 	static void moveStonesToPit(Pit from, Pit to) {
 		int stones = from.stones.getStonesNumber();
 		from.stones.setZero();
 		to.stones.putStones(stones);
 	}
 
+	/**
+	 * Method checks if {@link Player} can grab stones from opposite pit
+	 *
+	 * @param playerWithTurn player who the turn belongs to
+	 * @return true if player can grab the stones from opposite pit, false otherwise
+	 */
 	boolean canGrabStonesFromOpposite(Player playerWithTurn) {
 		return isOrdinary() && stones.wasLastPitEmpty() && isOwner(playerWithTurn);
 	}
 
-	boolean isOrdinaryOrHome(Player player) {
+	/**
+	 * Method checks if pit is ordinary or own home pit
+	 *
+	 * @param player {@link Player} player who the turn belongs to
+	 * @return true if current pit is ordinary or home pit which belongs to player with current turn, false otherwise
+	 */
+	boolean isOrdinaryOrOwnHome(Player player) {
 		return isOrdinary() || owner == player;
 	}
 

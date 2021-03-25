@@ -19,8 +19,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Test suite for {@link Game} class
+ */
 class GameTest {
-
 	@Test
 	void shouldMakeMove() {
 		GameBoard expected = prepareExpectedBoardAfterMoveChosenPitWithNumberEightLandInHome();

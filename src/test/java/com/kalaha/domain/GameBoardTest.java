@@ -12,6 +12,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Test suite for {@link GameBoard} class
+ */
 class GameBoardTest {
 	int givenOrdinaryPitsSize = 6;
 	int givenStones = 6;

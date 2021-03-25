@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.BiPredicate;
 
+/**
+ * Enum class represents validations which need to be carry out
+ */
 public enum Validator {
 	FINISHED((game, pitId) -> game.isGameFinished()),
 	GAME_NOT_FOUND((game, pitId) -> Objects.isNull(game)),
@@ -22,6 +25,14 @@ public enum Validator {
 		this.validation = validation;
 	}
 
+	/**
+	 * Method checks if all provided fields in order from up to down carries out predicates
+	 *
+	 * @param game  which are validated
+	 * @param pitId provided pit id
+	 * @return {@link Validator#SUCCESS} when provided data is corrected, otherwise one of the rest of fields represents what was not
+	 * comply to
+	 */
 	static Validator validate(Game game, int pitId) {
 		return Arrays.stream(values())
 				.filter(el -> el.validation.test(game, pitId))

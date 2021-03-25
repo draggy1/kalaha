@@ -24,6 +24,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
+/**
+ * Test suite for {@link GameService} class
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class GameServiceTest {
 	private final int givenOrdinaryPitsSize = 6;

@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Test fixtures used in tests
+ */
 public class Fixtures {
 	static Pit prepareInitialHead(int givenStones) {
 		Pit pit1 = Pit.createOrdinary(1, givenStones, Player.PLAYER_1);

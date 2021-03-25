@@ -4,6 +4,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Value;
 
+/**
+ * Class represents details about game
+ */
 @ApiModel(value = "Game details", description = "Details of created game")
 @Value(staticConstructor = "of")
 public class GameDetails {

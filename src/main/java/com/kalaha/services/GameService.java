@@ -25,7 +25,7 @@ public class GameService {
 				.resolve(String.valueOf(gameId))
 				.toString();
 
-		GameBoard board = GameBoard.of(config.getOrdinaryPitsSize(), config.getStones());
+		GameBoard board = GameBoard.of(config.getOrdinaryPitsNumber(), config.getStones());
 		container.addGame(new Game(gameId, board, PLAYER_1));
 		return GameDetails.of(gameId, uri);
 	}

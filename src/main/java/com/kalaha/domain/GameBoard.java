@@ -62,7 +62,7 @@ public class GameBoard {
 		Pit current = pit;
 		while (stonesNumber > 0) {
 			current = current.getNext();
-			if (current.isOrdinaryOrHome(playerWithMove)) {
+			if (current.isOrdinaryOrOwnHome(playerWithMove)) {
 				current.getStones().putStone();
 				stonesNumber--;
 			}
@@ -110,19 +110,19 @@ public class GameBoard {
 	 */
 	boolean canPlayersMakeMove() {
 		Pit current = head;
-		while (current.getStones().isPitEmpty() && current.getNumber() != homePitNumberOfPlayerOne) {
-			current = current.getNext();
-		}
-		if (current.getNumber() == homePitNumberOfPlayerOne) {
-			return false;
-		}
+		boolean hasPlayerOneNonEmptyPit = containsNotEmptyPit(current, homePitNumberOfPlayerOne);
 
 		current = findPitById(homePitNumberOfPlayerOne + 1);
+		boolean hasPlayerTwoNonEmptyPit = containsNotEmptyPit(current, homePitNumberOfPlayerTwo);
 
-		while (current.getStones().isPitEmpty() && current.getNumber() != homePitNumberOfPlayerTwo) {
+		return hasPlayerOneNonEmptyPit && hasPlayerTwoNonEmptyPit;
+	}
+
+	private boolean containsNotEmptyPit(Pit current, int homePlayerNumber) {
+		while (current.getStones().isPitEmpty() && current.getNumber() != homePlayerNumber) {
 			current = current.getNext();
 		}
-		return current.getNumber() != homePitNumberOfPlayerTwo;
+		return current.getNumber() != homePlayerNumber;
 	}
 
 	private static int calculateHomePitNumberOfPlayerTwo(int ordinaryPitsSizeOnePlayer) {

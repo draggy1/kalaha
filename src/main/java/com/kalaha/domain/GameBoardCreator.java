@@ -6,6 +6,9 @@ import static com.kalaha.domain.Player.PLAYER_1;
 import static com.kalaha.domain.Player.PLAYER_2;
 import lombok.Value;
 
+/**
+ * Class responsible for creating the game board
+ */
 @Value(staticConstructor = "of")
 public class GameBoardCreator {
 	private static final int FIRST_PIT_NUMBER = 1;
@@ -13,6 +16,13 @@ public class GameBoardCreator {
 	int homePitNumberOfPlayerOne;
 	int homePitNumberOfPlayerTwo;
 
+	/**
+	 * Method creates:
+	 * 1. Two home pits
+	 * 2. Ordinary pits in the recursion way
+	 *
+	 * @return first pit (with number one) and it has pointer to next one and so on
+	 */
 	Pit initBoard() {
 		Pit homePlayerOne = Pit.createHomeForPlayerOne(homePitNumberOfPlayerOne, 0);
 		Pit homePlayerTwo = Pit.createHomeForPlayerTwo(homePitNumberOfPlayerTwo, 0);

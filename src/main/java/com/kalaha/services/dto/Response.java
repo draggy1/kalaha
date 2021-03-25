@@ -5,6 +5,9 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.Map;
 import lombok.Value;
 
+/**
+ * Class represents response after performed move
+ */
 @ApiModel(value = "Response", description = "Response returned after made move")
 @Value(staticConstructor = "of")
 public class Response {
@@ -14,6 +17,6 @@ public class Response {
 	String url;
 	@ApiModelProperty(notes = "Describe how stones are located on board", name = "uri",
 			example = "{\"1\":\"4\",\"2\":\"4\",\"3\":\"4\",\"4\":\"4\",\"5\":\"4\",\"6\":\"4\",\"7\":\"0\",\"8\":\"4\",\"9\":\"4\"," +
-			"\"10\":\"4\",\"11\":\"4\",\"12\":\"4\",\"13\":\"4\",\"14\":\"0\"}")
+					"\"10\":\"4\",\"11\":\"4\",\"12\":\"4\",\"13\":\"4\",\"14\":\"0\"}")
 	Map<String, String> status;
 }
